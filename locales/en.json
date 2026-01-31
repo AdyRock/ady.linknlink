@@ -1,0 +1,35 @@
+{
+	"pair": {
+		"select_uaid": {
+			"title": "Select UAID",
+			"intro": "Select the UAID (User Account ID) you want to use.<br>This is obtained using the YoLink app menu:<br>&nbsp;&nbsp;- Settings<br>&nbsp;&nbsp;- Account<br>&nbsp;&nbsp;- Advanced settings<br>&nbsp;&nbsp;- User Access Credentials",
+			"uaid": "<b>UAID</b>",
+			"next": "Continue"
+		},
+		"enter_secret": {
+			"title": "Enter Secret",
+			"intro": "Enter the secret key for the selected UAID. This is obtained from the YoLink app.",
+			"secret": "Secret Key",
+			"next": "Continue"
+		}
+	},
+	"settings": {
+		"settings": "Internet",
+		"detected": "Detected",
+		"diagnosticsLog": "Diagnostics Log",
+		"clear": "Clear Log",
+		"send": "Send Log",
+		"detectedDescription": "** Do not share this information publicly **",
+		"enableLog": "Log Enabled",
+		"confirmSend": "Send the log contents to the developer?\n** All identifiers will be removed **",
+		"logSent": "The log has been sent.",
+		"logSendFailed": "Failed to send after 5 attempts.\nThe error messages are at the end of the log.",
+		"getDevices": "Get Devices",
+		"enableLLogExplanation": "If enabled, the app will log a lot of diagnostics information.<br>The app will still log errors even if this is disabled.",
+		"emailExplanation": "If you want me to respond to your log, please enter your email address or forum id here so I know how to contact you.",
+		"description": "Description",
+		"descriptionExplanation": "Please enter a brief description of the problem if you are going to send the log.",
+		"email": "Email Address or Forum id",
+		"sendLogConfirm": "Send the log contents to the developer?"
+	}
+}

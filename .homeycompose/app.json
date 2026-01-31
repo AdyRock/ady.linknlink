@@ -1,0 +1,88 @@
+{
+	"id": "ady.linknlink",
+	"version": "0.0.1",
+	"compatibility": ">=12.5.0",
+	"sdk": 3,
+	"platforms": [
+		"local"
+	],
+	"brandColor": "#87b4e1",
+	"name": {
+		"en": "LinknLink"
+	},
+	"description": {
+		"en": "Powering your smart home with LinknLink.",
+		"nl": "Je slimme huis aansturen met LinknLink.",
+		"de": "Steuern Sie Ihr Smart Home mit LinknLink.",
+		"fr": "Alimentez votre maison intelligente avec LinknLink.",
+		"es": "Potenciando tu hogar inteligente con LinknLink.",
+		"it": "Alimentare la tua casa intelligente con LinknLink.",
+		"pt": "Potenciando sua casa inteligente com LinknLink.",
+		"sv": "Driva ditt smarta hem med LinknLink.",
+		"da": "Strøm dit smarte hjem med LinknLink.",
+		"no": "Drive ditt smarte hjem med LinknLink.",
+		"pl": "Zasilanie inteligentnego domu za pomocą LinknLink.",
+		"ru": "Управляйте своим умным домом с помощью LinknLink.",
+		"ko": "LinknLink로 스마트 홈에 전원을 공급합니다."
+	},
+	"category": [
+		"appliances"
+	],
+	"contributing": {
+		"donate": {
+			"paypal": {
+				"username": "adyrock"
+			}
+		}
+	},
+	"permissions": [],
+	"images": {
+		"small": "/assets/images/small.jpg",
+		"large": "/assets/images/large.jpg"
+	},
+	"author": {
+		"name": "Adrian Rockall",
+		"email": "ady@rockalls.com"
+	},
+	"bugs": {
+		"url": "https://github.com/AdyRock/com.linknlink/issues"
+	},
+	"homepage": "https://shop.yosmart.com/",
+	"support": "https://github.com/AdyRock/com.linknlink/issues",
+	"homeyCommunityTopicId": 143373,
+	"api": {
+		"getDeviceLog": {
+			"method": "get",
+			"path": "/getDeviceLog",
+			"public": false
+		},
+		"getInfoLog": {
+			"method": "get",
+			"path": "/getInfoLog",
+			"public": false
+		},
+		"clearLog": {
+			"method": "post",
+			"path": "/clearLog",
+			"public": false
+		},
+		"SendDeviceLog": {
+			"method": "post",
+			"path": "/SendDeviceLog",
+			"public": false
+		},
+		"sendInfoLog": {
+			"method": "post",
+			"path": "/sendInfoLog",
+			"public": false
+		}
+	},
+	"tags": {
+		"en": [
+			"Presence Sensor"
+		],
+		"nl": [
+			"Aanwezigheidssensor"
+		]
+	}
+}
