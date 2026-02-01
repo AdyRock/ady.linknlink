@@ -1,0 +1,24 @@
+{
+	"title": {
+		"en": "the number of people in zone 1 changed",
+		"nl": "het aantal personen in zone 1 is gewijzigd",
+		"de": "die Anzahl der Personen in Zone 1 hat sich geändert",
+		"fr": "le nombre de personnes dans la zone 1 a changé",
+		"es": "el número de personas en la zona 1 ha cambiado",
+		"it": "il numero di persone nella zona 1 è cambiato",
+		"pt": "o número de pessoas na zona 1 mudou",
+		"sv": "antalet personer i zon 1 har ändrats",
+		"da": "antallet af personer i zone 1 er ændret",
+		"no": "antall personer i sone 1 har endret seg",
+		"pl": "liczba osób w strefie 1 uległa zmianie",
+		"ru": "число людей в зоне 1 изменилось",
+		"ko": "영역 1의 사람 수가 변경되었습니다."
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionUltra"
+		}
+	]
+}

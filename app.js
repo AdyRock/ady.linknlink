@@ -21,6 +21,21 @@ module.exports = class LinknLink extends Homey.App
 		this.linknLinkAPI = new LinknLinkAPI(this);
 		this.homeyID = await this.homey.cloud.getHomeyId();
 
+		// Setup Flow actions, conditions and triggers
+		this.alarm_presence_zone1_false = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone1_false');
+		this.alarm_presence_zone1_true = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone1_true');
+		this.alarm_presence_zone2_false = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone2_false');
+		this.alarm_presence_zone2_true = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone2_true');
+		this.alarm_presence_zone3_false = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone3_false');
+		this.alarm_presence_zone3_true = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone3_true');
+		this.alarm_presence_zone4_false = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone4_false');
+		this.alarm_presence_zone4_true = this.homey.flow.getDeviceTriggerCard('alarm_presence_zone4_true');
+		this.measure_people_count_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_changed');
+		this.measure_people_count_zone1_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone1_changed');
+		this.measure_people_count_zone2_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone2_changed');
+		this.measure_people_count_zone3_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone3_changed');
+		this.measure_people_count_zone4_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone4_changed');
+
 		this.homey.settings.on('set', async (setting) =>
 		{
 		});
@@ -30,6 +45,71 @@ module.exports = class LinknLink extends Homey.App
 		this.linknLinkAPI.setupHomeyMQTTServer();
 
 		this.updateLog('LinknLink app has been initialized');
+	}
+
+	trigger_alarm_presence_zone1_false(device)
+	{
+		this.alarm_presence_zone1_false.trigger(device);
+	}
+
+	trigger_alarm_presence_zone1_true(device)
+	{
+		this.alarm_presence_zone1_true.trigger(device);
+	}
+
+	trigger_alarm_presence_zone2_false(device)
+	{
+		this.alarm_presence_zone2_false.trigger(device);
+	}
+
+	trigger_alarm_presence_zone2_true(device)
+	{
+		this.alarm_presence_zone2_true.trigger(device);
+	}
+
+	trigger_alarm_presence_zone3_false(device)
+	{
+		this.alarm_presence_zone3_false.trigger(device);
+	}
+
+	trigger_alarm_presence_zone3_true(device)
+	{
+		this.alarm_presence_zone3_true.trigger(device);
+	}
+
+	trigger_alarm_presence_zone4_false(device)
+	{
+		this.alarm_presence_zone4_false.trigger(device);
+	}
+
+	trigger_alarm_presence_zone4_true(device)
+	{
+		this.alarm_presence_zone4_true.trigger(device);
+	}
+
+	trigger_measure_people_count_changed(device)
+	{
+		this.measure_people_count_changed.trigger(device);
+	}
+
+	trigger_measure_people_count_zone1_changed(device)
+	{
+		this.measure_people_count_zone1_changed.trigger(device);
+	}
+
+	trigger_measure_people_count_zone2_changed(device)
+	{
+		this.measure_people_count_zone2_changed.trigger(device);
+	}
+
+	trigger_measure_people_count_zone3_changed(device)
+	{
+		this.measure_people_count_zone3_changed.trigger(device);
+	}
+
+	trigger_measure_people_count_zone4_changed(device)
+	{
+		this.measure_people_count_zone4_changed.trigger(device);
 	}
 
 	registerDevice(did, driverId)

@@ -1,0 +1,24 @@
+{
+	"title": {
+		"en": "the number of people in zone 4 changed",
+		"nl": "het aantal personen in zone 4 is gewijzigd",
+		"de": "die Anzahl der Personen in Zone 4 hat sich geändert",
+		"fr": "le nombre de personnes dans la zone 4 a changé",
+		"es": "el número de personas en la zona 4 ha cambiado",
+		"it": "il numero di persone nella zona 4 è cambiato",
+		"pt": "o número de pessoas na zona 4 mudou",
+		"sv": "antalet personer i zon 4 har ändrats",
+		"da": "antallet af personer i zone 4 er ændret",
+		"no": "antall personer i sone 4 har endret seg",
+		"pl": "liczba osób w strefie 4 uległa zmianie",
+		"ru": "число людей в зоне 4 изменилось",
+		"ko": "영역 4의 사람 수가 변경되었습니다."
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionUltra"
+		}
+	]
+}

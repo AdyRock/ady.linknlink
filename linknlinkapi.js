@@ -112,6 +112,8 @@ module.exports = class LinknLink extends SimpleClass
 	{
 		if (!this.broker.useHomeyBroker)
 		{
+			// Start the MQTT client
+			this.setupMQTTClient(this.broker, this.app.homeyID);
 			return;
 		}
 
@@ -508,7 +510,7 @@ module.exports = class LinknLink extends SimpleClass
 			// Queue messages until device is available?
 			this.pendingMessages.set(entityKey, payloadStr);
 
-			this.log('No device found for', ent.deviceId);
+			this.log(`No device found for ${ent.deviceId}, caching message`);
 			return;
 		}
 

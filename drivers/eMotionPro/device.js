@@ -73,31 +73,81 @@ module.exports = class eMotionProDevice extends Homey.Device
 			this.setCapabilityValue('alarm_presence', value).catch(this.error);
 			return true;
 		}
+
 		if (mqttMessage.name === 'area_1')
 		{
-			this.setCapabilityValue('alarm_presence.zone1', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone1') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone1', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone1_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone1_false(this);
+				}
+			}
 			return true;
 		}
+
 		if (mqttMessage.name === 'area_2')
 		{
-			this.setCapabilityValue('alarm_presence.zone2', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone2') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone2', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone2_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone2_false(this);
+				}
+			}
 			return true;
 		}
+
 		if (mqttMessage.name === 'area_3')
 		{
-			this.setCapabilityValue('alarm_presence.zone3', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone3') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone3', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone3_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone3_false(this);
+				}
+			}
 			return true;
 		}
+
 		if (mqttMessage.name === 'area_4')
 		{
-			this.setCapabilityValue('alarm_presence.zone4', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone4') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone4', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone4_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone4_false(this);
+				}
+			}
 			return true;
 		}
+
 		if (mqttMessage.name === 'brightness')
 		{
 			this.setCapabilityValue('measure_luminance', value).catch(this.error);
 			return true;
 		}
+
 		if (mqttMessage.name === 'wifi rssi')
 		{
 			this.setCapabilityValue('measure_signal_strength', parseInt(value, 10)).catch(this.error);

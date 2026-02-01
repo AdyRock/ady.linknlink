@@ -91,6 +91,335 @@
       "Aanwezigheidssensor"
     ]
   },
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "The zone 1 presence alarm turned off",
+          "nl": "Het aanwezigheid alarm in zone 1 is uitgeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 1 wurde ausgeschaltet",
+          "fr": "L'alarme de présence de la zone 1 est désactivée",
+          "es": "La alarma de presencia de la zona 1 se ha desactivado",
+          "it": "L'allarme di presenza della zona 1 è disattivato",
+          "pt": "O alarme de presença da zona 1 foi desativado",
+          "sv": "Närvarolarmet i zon 1 har inaktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 1 er deaktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 1 er deaktivert",
+          "pl": "Alarm obecności w strefie 1 został wyłączony",
+          "ru": "Тревога присутствия в зоне 1 выключена",
+          "ko": "영역 1 존재 경보가 꺼졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone1_false"
+      },
+      {
+        "title": {
+          "en": "The zone 1 presence alarm turned on",
+          "nl": "Het aanwezigheid alarm in zone 1 is ingeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 1 wurde eingeschaltet",
+          "fr": "L'alarme de présence de la zone 1 est activée",
+          "es": "La alarma de presencia de la zona 1 se ha activado",
+          "it": "L'allarme di presenza della zona 1 è attivato",
+          "pt": "O alarme de presença da zona 1 foi ativado",
+          "sv": "Närvarolarmet i zon 1 har aktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 1 er aktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 1 er aktivert",
+          "pl": "Alarm obecności w strefie 1 został włączony",
+          "ru": "Тревога присутствия в зоне 1 включена",
+          "ko": "영역 1 존재 경보가 켜졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone1_true"
+      },
+      {
+        "title": {
+          "en": "The zone 2 presence alarm turned off",
+          "nl": "Het aanwezigheid alarm in zone 2 is uitgeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 2 wurde ausgeschaltet",
+          "fr": "L'alarme de présence de la zone 2 est désactivée",
+          "es": "La alarma de presencia de la zona 2 se ha desactivado",
+          "it": "L'allarme di presenza della zona 2 è disattivato",
+          "pt": "O alarme de presença da zona 2 foi desativado",
+          "sv": "Närvarolarmet i zon 2 har inaktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 2 er deaktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 2 er deaktivert",
+          "pl": "Alarm obecności w strefie 2 został wyłączony",
+          "ru": "Тревога присутствия в зоне 2 выключена",
+          "ko": "영역 2 존재 경보가 꺼졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone2_false"
+      },
+      {
+        "title": {
+          "en": "The zone 2 presence alarm turned on",
+          "nl": "Het aanwezigheid alarm in zone 2 is ingeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 2 wurde eingeschaltet",
+          "fr": "L'alarme de présence de la zone 2 est activée",
+          "es": "La alarma de presencia de la zona 2 se ha activado",
+          "it": "L'allarme di presenza della zona 2 è attivato",
+          "pt": "O alarme de presença da zona 2 foi ativado",
+          "sv": "Närvarolarmet i zon 2 har aktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 2 er aktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 2 er aktivert",
+          "pl": "Alarm obecności w strefie 2 został włączony",
+          "ru": "Тревога присутствия в зоне 2 включена",
+          "ko": "영역 2 존재 경보가 켜졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone2_true"
+      },
+      {
+        "title": {
+          "en": "The zone 3 presence alarm turned off",
+          "nl": "Het aanwezigheid alarm in zone 3 is uitgeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 3 wurde ausgeschaltet",
+          "fr": "L'alarme de présence de la zone 3 est désactivée",
+          "es": "La alarma de presencia de la zona 3 se ha desactivado",
+          "it": "L'allarme di presenza della zona 3 è disattivato",
+          "pt": "O alarme de presença da zona 3 foi desativado",
+          "sv": "Närvarolarmet i zon 3 har inaktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 3 er deaktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 3 er deaktivert",
+          "pl": "Alarm obecności w strefie 3 został wyłączony",
+          "ru": "Тревога присутствия в зоне 3 выключена",
+          "ko": "영역 3 존재 경보가 꺼졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone3_false"
+      },
+      {
+        "title": {
+          "en": "The zone 3 presence alarm turned on",
+          "nl": "Het aanwezigheid alarm in zone 3 is ingeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 3 wurde eingeschaltet",
+          "fr": "L'alarme de présence de la zone 3 est activée",
+          "es": "La alarma de presencia de la zona 3 se ha activado",
+          "it": "L'allarme di presenza della zona 3 è attivato",
+          "pt": "O alarme de presença da zona 3 foi ativado",
+          "sv": "Närvarolarmet i zon 3 har aktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 3 er aktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 3 er aktivert",
+          "pl": "Alarm obecności w strefie 3 został włączony",
+          "ru": "Тревога присутствия в зоне 3 включена",
+          "ko": "영역 3 존재 경보가 켜졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone3_true"
+      },
+      {
+        "title": {
+          "en": "The zone 4 presence alarm turned off",
+          "nl": "Het aanwezigheid alarm in zone 4 is uitgeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 4 wurde ausgeschaltet",
+          "fr": "L'alarme de présence de la zone 4 est désactivée",
+          "es": "La alarma de presencia de la zona 4 se ha desactivado",
+          "it": "L'allarme di presenza della zona 4 è disattivato",
+          "pt": "O alarme de presença da zona 4 foi desativado",
+          "sv": "Närvarolarmet i zon 4 har inaktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 4 er deaktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 4 er deaktivert",
+          "pl": "Alarm obecności w strefie 4 został wyłączony",
+          "ru": "Тревога присутствия в зоне 4 выключена",
+          "ko": "영역 4 존재 경보가 꺼졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone4_false"
+      },
+      {
+        "title": {
+          "en": "The zone 4 presence alarm turned on",
+          "nl": "Het aanwezigheid alarm in zone 4 is ingeschakeld",
+          "de": "Der Anwesenheitsalarm in Zone 4 wurde eingeschaltet",
+          "fr": "L'alarme de présence de la zone 4 est activée",
+          "es": "La alarma de presencia de la zona 4 se ha activado",
+          "it": "L'allarme di presenza della zona 4 è attivato",
+          "pt": "O alarme de presença da zona 4 foi ativado",
+          "sv": "Närvarolarmet i zon 4 har aktiverats",
+          "da": "Tilstedeværelsesalarmen i zone 4 er aktiveret",
+          "no": "Tilstedeværelsesalarmen i sone 4 er aktivert",
+          "pl": "Alarm obecności w strefie 4 został włączony",
+          "ru": "Тревога присутствия в зоне 4 включена",
+          "ko": "영역 4 존재 경보가 켜졌습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionPro|eMotionUltra"
+          }
+        ],
+        "id": "alarm_presence_zone4_true"
+      },
+      {
+        "title": {
+          "en": "the number of people changed",
+          "nl": "het aantal personen is gewijzigd",
+          "de": "die Anzahl der Personen hat sich geändert",
+          "fr": "le nombre de personnes a changé",
+          "es": "el número de personas ha cambiado",
+          "it": "il numero di persone è cambiato",
+          "pt": "o número de pessoas mudou",
+          "sv": "antalet personer har ändrats",
+          "da": "antallet af personer er ændret",
+          "no": "antall personer har endret seg",
+          "pl": "liczba osób uległa zmianie",
+          "ru": "число людей изменилось",
+          "ko": "사람 수가 변경되었습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionUltra"
+          }
+        ],
+        "id": "measure_people_count_changed"
+      },
+      {
+        "title": {
+          "en": "the number of people in zone 1 changed",
+          "nl": "het aantal personen in zone 1 is gewijzigd",
+          "de": "die Anzahl der Personen in Zone 1 hat sich geändert",
+          "fr": "le nombre de personnes dans la zone 1 a changé",
+          "es": "el número de personas en la zona 1 ha cambiado",
+          "it": "il numero di persone nella zona 1 è cambiato",
+          "pt": "o número de pessoas na zona 1 mudou",
+          "sv": "antalet personer i zon 1 har ändrats",
+          "da": "antallet af personer i zone 1 er ændret",
+          "no": "antall personer i sone 1 har endret seg",
+          "pl": "liczba osób w strefie 1 uległa zmianie",
+          "ru": "число людей в зоне 1 изменилось",
+          "ko": "영역 1의 사람 수가 변경되었습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionUltra"
+          }
+        ],
+        "id": "measure_people_count_zone1_changed"
+      },
+      {
+        "title": {
+          "en": "the number of people in zone 2 changed",
+          "nl": "het aantal personen in zone 2 is gewijzigd",
+          "de": "die Anzahl der Personen in Zone 2 hat sich geändert",
+          "fr": "le nombre de personnes dans la zone 2 a changé",
+          "es": "el número de personas en la zona 2 ha cambiado",
+          "it": "il numero di persone nella zona 2 è cambiato",
+          "pt": "o número de pessoas na zona 2 mudou",
+          "sv": "antalet personer i zon 2 har ändrats",
+          "da": "antallet af personer i zone 2 er ændret",
+          "no": "antall personer i sone 2 har endret seg",
+          "pl": "liczba osób w strefie 2 uległa zmianie",
+          "ru": "число людей в зоне 2 изменилось",
+          "ko": "영역 2의 사람 수가 변경되었습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionUltra"
+          }
+        ],
+        "id": "measure_people_count_zone2_changed"
+      },
+      {
+        "title": {
+          "en": "the number of people in zone 3 changed",
+          "nl": "het aantal personen in zone 3 is gewijzigd",
+          "de": "die Anzahl der Personen in Zone 3 hat sich geändert",
+          "fr": "le nombre de personnes dans la zone 3 a changé",
+          "es": "el número de personas en la zona 3 ha cambiado",
+          "it": "il numero di persone nella zona 3 è cambiato",
+          "pt": "o número de pessoas na zona 3 mudou",
+          "sv": "antalet personer i zon 3 har ändrats",
+          "da": "antallet af personer i zone 3 er ændret",
+          "no": "antall personer i sone 3 har endret seg",
+          "pl": "liczba osób w strefie 3 uległa zmianie",
+          "ru": "число людей в зоне 3 изменилось",
+          "ko": "영역 3의 사람 수가 변경되었습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionUltra"
+          }
+        ],
+        "id": "measure_people_count_zone3_changed"
+      },
+      {
+        "title": {
+          "en": "the number of people in zone 4 changed",
+          "nl": "het aantal personen in zone 4 is gewijzigd",
+          "de": "die Anzahl der Personen in Zone 4 hat sich geändert",
+          "fr": "le nombre de personnes dans la zone 4 a changé",
+          "es": "el número de personas en la zona 4 ha cambiado",
+          "it": "il numero di persone nella zona 4 è cambiato",
+          "pt": "o número de pessoas na zona 4 mudou",
+          "sv": "antalet personer i zon 4 har ändrats",
+          "da": "antallet af personer i zone 4 er ændret",
+          "no": "antall personer i sone 4 har endret seg",
+          "pl": "liczba osób w strefie 4 uległa zmianie",
+          "ru": "число людей в зоне 4 изменилось",
+          "ko": "영역 4의 사람 수가 변경되었습니다."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionUltra"
+          }
+        ],
+        "id": "measure_people_count_zone4_changed"
+      }
+    ]
+  },
   "drivers": [
     {
       "platforms": [
@@ -317,10 +646,15 @@
       "class": "sensor",
       "capabilities": [
         "alarm_presence",
+        "measure_people_count",
         "alarm_presence.zone1",
+        "measure_people_count.zone1",
         "alarm_presence.zone2",
+        "measure_people_count.zone2",
         "alarm_presence.zone3",
+        "measure_people_count.zone3",
         "alarm_presence.zone4",
+        "measure_people_count.zone4",
         "measure_temperature",
         "measure_humidity",
         "measure_luminance",
@@ -365,6 +699,20 @@
             "ko": "존 1에서 존재가 감지되지 않음"
           }
         },
+        "measure_people_count.zone1": {
+          "title": {
+            "en": "Zone 1 People Count",
+            "nl": "Aantal Personen Zone 1",
+            "de": "Personenzahl Zone 1",
+            "fr": "Nombre de Personnes Zone 1",
+            "it": "Conteggio Persone Zona 1",
+            "es": "Recuento de Personas Zona 1",
+            "sv": "Antal Personer Zon 1",
+            "da": "Antal Personer Zone 1",
+            "pl": "Liczba Osób Strefa 1",
+            "ko": "존 1 인원 수"
+          }
+        },
         "alarm_presence.zone2": {
           "title": {
             "en": "Zone 2 Presence",
@@ -401,6 +749,20 @@
             "da": "Ingen Tilstedeværelse Registreret i Zone 2",
             "pl": "Brak Wykrytej Obecności w Strefie 2",
             "ko": "존 2에서 존재가 감지되지 않음"
+          }
+        },
+        "measure_people_count.zone2": {
+          "title": {
+            "en": "Zone 2 People Count",
+            "nl": "Aantal Personen Zone 2",
+            "de": "Personenzahl Zone 2",
+            "fr": "Nombre de Personnes Zone 2",
+            "it": "Conteggio Persone Zona 2",
+            "es": "Recuento de Personas Zona 2",
+            "sv": "Antal Personer Zon 2",
+            "da": "Antal Personer Zone 2",
+            "pl": "Liczba Osób Strefa 2",
+            "ko": "존 2 인원 수"
           }
         },
         "alarm_presence.zone3": {
@@ -441,6 +803,20 @@
             "ko": "존 3에서 존재가 감지되지 않음"
           }
         },
+        "measure_people_count.zone3": {
+          "title": {
+            "en": "Zone 3 People Count",
+            "nl": "Aantal Personen Zone 3",
+            "de": "Personenzahl Zone 3",
+            "fr": "Nombre de Personnes Zone 3",
+            "it": "Conteggio Persone Zona 3",
+            "es": "Recuento de Personas Zona 3",
+            "sv": "Antal Personer Zon 3",
+            "da": "Antal Personer Zone 3",
+            "pl": "Liczba Osób Strefa 3",
+            "ko": "존 3 인원 수"
+          }
+        },
         "alarm_presence.zone4": {
           "title": {
             "en": "Zone 4 Presence",
@@ -478,9 +854,46 @@
             "pl": "Brak Wykrytej Obecności w Strefie 4",
             "ko": "존 4에서 존재가 감지되지 않음"
           }
+        },
+        "measure_people_count.zone4": {
+          "title": {
+            "en": "Zone 4 People Count",
+            "nl": "Aantal Personen Zone 4",
+            "de": "Personenzahl Zone 4",
+            "fr": "Nombre de Personnes Zone 4",
+            "it": "Conteggio Persone Zona 4",
+            "es": "Recuento de Personas Zona 4",
+            "sv": "Antal Personer Zon 4",
+            "da": "Antal Personer Zone 4",
+            "pl": "Liczba Osób Strefa 4",
+            "ko": "존 4 인원 수"
+          }
         }
       },
       "id": "eMotionUltra"
     }
-  ]
+  ],
+  "capabilities": {
+    "measure_people_count": {
+      "type": "number",
+      "title": {
+        "en": "People Count",
+        "nl": "Aantal Personen",
+        "de": "Personenzahl",
+        "fr": "Nombre de personnes",
+        "it": "Conteggio Persone",
+        "es": "Recuento de Personas",
+        "pt": "Contagem de Pessoas",
+        "sv": "Antal personer",
+        "da": "Antal personer",
+        "no": "Antall personer",
+        "pl": "Liczba osób",
+        "ru": "Количество людей",
+        "ko": "사람 수"
+      },
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/people_count.svg"
+    }
+  }
 }

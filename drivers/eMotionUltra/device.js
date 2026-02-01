@@ -66,48 +66,155 @@ module.exports = class eMotionUltraDevice extends Homey.Device
 		}
 
 		// Log the device status
-		// this.homey.app.updateLog(`MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
+		this.homey.app.updateLog(`MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
 
 		if (mqttMessage.name === 'Any Presence')
 		{
 			this.setCapabilityValue('alarm_presence', value).catch(this.error);
 			return true;
 		}
+
+		if (mqttMessage.name === 'All Target Counts')
+		{
+			value = parseInt(value, 10);
+			if (this.getCapabilityValue('measure_people_count') !== value)
+			{
+				this.setCapabilityValue('measure_people_count', value).catch(this.error);
+				this.homey.app.trigger_measure_people_count_changed(this);
+			}
+			return true;
+		}
+
 		if (mqttMessage.name === 'Zone 1 Presence')
 		{
-			this.setCapabilityValue('alarm_presence.zone1', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone1') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone1', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone1_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone1_false(this);
+				}
+			}
 			return true;
 		}
+
+		if (mqttMessage.name === 'Zone 1 Target Counts')
+		{
+			value = parseInt(value, 10);
+			if (this.getCapabilityValue('measure_people_count.zone1') !== value)
+			{
+				this.setCapabilityValue('measure_people_count.zone1', value).catch(this.error);
+				this.homey.app.trigger_measure_people_count_zone1_changed(this);
+			}
+			return true;
+		}
+
 		if (mqttMessage.name === 'Zone 2 Presence')
 		{
-			this.setCapabilityValue('alarm_presence.zone2', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone2') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone2', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone2_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone2_false(this);
+				}
+			}
 			return true;
 		}
+
+		if (mqttMessage.name === 'Zone 2 Target Counts')
+		{
+			value = parseInt(value, 10);
+			if (this.getCapabilityValue('measure_people_count.zone2') !== value)
+			{
+				this.setCapabilityValue('measure_people_count.zone2', value).catch(this.error);
+				this.homey.app.trigger_measure_people_count_zone2_changed(this);
+			}
+			return true;
+		}
+
 		if (mqttMessage.name === 'Zone 3 Presence')
 		{
-			this.setCapabilityValue('alarm_presence.zone3', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone3') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone3', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone3_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone3_false(this);
+				}
+			}
 			return true;
 		}
+
+		if (mqttMessage.name === 'Zone 3 Target Counts')
+		{
+			value = parseInt(value, 10);
+			if (this.getCapabilityValue('measure_people_count.zone3') !== value)
+			{
+				this.setCapabilityValue('measure_people_count.zone3', value).catch(this.error);
+				this.homey.app.trigger_measure_people_count_zone3_changed(this);
+			}
+			return true;
+		}
+
 		if (mqttMessage.name === 'Zone 4 Presence')
 		{
-			this.setCapabilityValue('alarm_presence.zone4', value).catch(this.error);
+			if (this.getCapabilityValue('alarm_presence.zone4') !== value)
+			{
+				this.setCapabilityValue('alarm_presence.zone4', value).catch(this.error);
+				if (value === true)
+				{
+					this.homey.app.trigger_alarm_presence_zone4_true(this);
+				}
+				else
+				{
+					this.homey.app.trigger_alarm_presence_zone4_false(this);
+				}
+			}
 			return true;
 		}
+
+		if (mqttMessage.name === 'Zone 4 Target Counts')
+		{
+			value = parseInt(value, 10);
+			if (this.getCapabilityValue('measure_people_count.zone4') !== value)
+			{
+				this.setCapabilityValue('measure_people_count.zone4', value).catch(this.error);
+				this.homey.app.trigger_measure_people_count_zone4_changed(this);
+			}
+			return true;
+		}
+
 		if (mqttMessage.name === 'temperature')
 		{
 			this.setCapabilityValue('measure_temperature', value).catch(this.error);
 			return true;
 		}
+
 		if (mqttMessage.name === 'humidity')
 		{
 			this.setCapabilityValue('measure_humidity', value).catch(this.error);
 			return true;
 		}
+
 		if (mqttMessage.name === 'brightness')
 		{
 			this.setCapabilityValue('measure_luminance', value).catch(this.error);
 			return true;
 		}
+
 		if (mqttMessage.name === 'wifi rssi')
 		{
 			this.setCapabilityValue('measure_signal_strength', parseInt(value, 10)).catch(this.error);

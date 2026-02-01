@@ -5,14 +5,19 @@
 	"class": "sensor",
 	"capabilities": [
 		"alarm_presence",
-		"alarm_presence.zone1",
-		"alarm_presence.zone2",
-		"alarm_presence.zone3",
-		"alarm_presence.zone4",
+		"measure_people_count",
 		"measure_temperature",
 		"measure_humidity",
 		"measure_luminance",
-		"measure_signal_strength"
+		"measure_signal_strength",
+		"alarm_presence.zone1",
+		"measure_people_count.zone1",
+		"alarm_presence.zone2",
+		"measure_people_count.zone2",
+		"alarm_presence.zone3",
+		"measure_people_count.zone3",
+		"alarm_presence.zone4",
+		"measure_people_count.zone4"
 	],
 	"capabilitiesOptions": {
 		"alarm_presence.zone1": {
@@ -53,6 +58,20 @@
 				"ko": "존 1에서 존재가 감지되지 않음"
 			}
 		},
+		"measure_people_count.zone1": {
+			"title": {
+				"en": "Zone 1 People Count",
+				"nl": "Aantal Personen Zone 1",
+				"de": "Personenzahl Zone 1",
+				"fr": "Nombre de Personnes Zone 1",
+				"it": "Conteggio Persone Zona 1",
+				"es": "Recuento de Personas Zona 1",
+				"sv": "Antal Personer Zon 1",
+				"da": "Antal Personer Zone 1",
+				"pl": "Liczba Osób Strefa 1",
+				"ko": "존 1 인원 수"
+			}
+		},
 		"alarm_presence.zone2": {
 			"title": {
 				"en": "Zone 2 Presence",
@@ -89,6 +108,20 @@
 				"da": "Ingen Tilstedeværelse Registreret i Zone 2",
 				"pl": "Brak Wykrytej Obecności w Strefie 2",
 				"ko": "존 2에서 존재가 감지되지 않음"
+			}
+		},
+		"measure_people_count.zone2": {
+			"title": {
+				"en": "Zone 2 People Count",
+				"nl": "Aantal Personen Zone 2",
+				"de": "Personenzahl Zone 2",
+				"fr": "Nombre de Personnes Zone 2",
+				"it": "Conteggio Persone Zona 2",
+				"es": "Recuento de Personas Zona 2",
+				"sv": "Antal Personer Zon 2",
+				"da": "Antal Personer Zone 2",
+				"pl": "Liczba Osób Strefa 2",
+				"ko": "존 2 인원 수"
 			}
 		},
 		"alarm_presence.zone3": {
@@ -129,6 +162,20 @@
 				"ko": "존 3에서 존재가 감지되지 않음"
 			}
 		},
+		"measure_people_count.zone3": {
+			"title": {
+				"en": "Zone 3 People Count",
+				"nl": "Aantal Personen Zone 3",
+				"de": "Personenzahl Zone 3",
+				"fr": "Nombre de Personnes Zone 3",
+				"it": "Conteggio Persone Zona 3",
+				"es": "Recuento de Personas Zona 3",
+				"sv": "Antal Personer Zon 3",
+				"da": "Antal Personer Zone 3",
+				"pl": "Liczba Osób Strefa 3",
+				"ko": "존 3 인원 수"
+			}
+		},
 		"alarm_presence.zone4": {
 			"title": {
 				"en": "Zone 4 Presence",
@@ -165,6 +212,20 @@
 				"da": "Ingen Tilstedeværelse Registreret i Zone 4",
 				"pl": "Brak Wykrytej Obecności w Strefie 4",
 				"ko": "존 4에서 존재가 감지되지 않음"
+			}
+		},
+		"measure_people_count.zone4": {
+			"title": {
+				"en": "Zone 4 People Count",
+				"nl": "Aantal Personen Zone 4",
+				"de": "Personenzahl Zone 4",
+				"fr": "Nombre de Personnes Zone 4",
+				"it": "Conteggio Persone Zona 4",
+				"es": "Recuento de Personas Zona 4",
+				"sv": "Antal Personer Zon 4",
+				"da": "Antal Personer Zone 4",
+				"pl": "Liczba Osób Strefa 4",
+				"ko": "존 4 인원 수"
 			}
 		}
 	},

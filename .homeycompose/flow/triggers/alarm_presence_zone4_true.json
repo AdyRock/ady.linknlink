@@ -1,0 +1,24 @@
+{
+	"title": {
+		"en": "The zone 4 presence alarm turned on",
+		"nl": "Het aanwezigheid alarm in zone 4 is ingeschakeld",
+		"de": "Der Anwesenheitsalarm in Zone 4 wurde eingeschaltet",
+		"fr": "L'alarme de présence de la zone 4 est activée",
+		"es": "La alarma de presencia de la zona 4 se ha activado",
+		"it": "L'allarme di presenza della zona 4 è attivato",
+		"pt": "O alarme de presença da zona 4 foi ativado",
+		"sv": "Närvarolarmet i zon 4 har aktiverats",
+		"da": "Tilstedeværelsesalarmen i zone 4 er aktiveret",
+		"no": "Tilstedeværelsesalarmen i sone 4 er aktivert",
+		"pl": "Alarm obecności w strefie 4 został włączony",
+		"ru": "Тревога присутствия в зоне 4 включена",
+		"ko": "영역 4 존재 경보가 켜졌습니다."
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionPro|eMotionUltra"
+		}
+	]
+}

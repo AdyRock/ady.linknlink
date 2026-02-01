@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "People Count",
+	"nl": "Aantal Personen",
+	"de": "Personenzahl",
+	"fr": "Nombre de personnes",
+	"it": "Conteggio Persone",
+	"es": "Recuento de Personas",
+	"pt": "Contagem de Pessoas",
+	"sv": "Antal personer",
+	"da": "Antal personer",
+	"no": "Antall personer",
+	"pl": "Liczba osób",
+	"ru": "Количество людей",
+	"ko": "사람 수"
+  },
+  "getable": true,
+  "setable": false,
+  "icon": "/assets/people_count.svg"
+}

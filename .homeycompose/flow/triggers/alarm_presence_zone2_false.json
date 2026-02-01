@@ -1,0 +1,24 @@
+{
+	"title": {
+		"en": "The zone 2 presence alarm turned off",
+		"nl": "Het aanwezigheid alarm in zone 2 is uitgeschakeld",
+		"de": "Der Anwesenheitsalarm in Zone 2 wurde ausgeschaltet",
+		"fr": "L'alarme de présence de la zone 2 est désactivée",
+		"es": "La alarma de presencia de la zona 2 se ha desactivado",
+		"it": "L'allarme di presenza della zona 2 è disattivato",
+		"pt": "O alarme de presença da zona 2 foi desativado",
+		"sv": "Närvarolarmet i zon 2 har inaktiverats",
+		"da": "Tilstedeværelsesalarmen i zone 2 er deaktiveret",
+		"no": "Tilstedeværelsesalarmen i sone 2 er deaktivert",
+		"pl": "Alarm obecności w strefie 2 został wyłączony",
+		"ru": "Тревога присутствия в зоне 2 выключена",
+		"ko": "영역 2 존재 경보가 꺼졌습니다."
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionPro|eMotionUltra"
+		}
+	]
+}

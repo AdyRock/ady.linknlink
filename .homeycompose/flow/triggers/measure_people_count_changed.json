@@ -1,0 +1,24 @@
+{
+	"title": {
+		"en": "the number of people changed",
+		"nl": "het aantal personen is gewijzigd",
+		"de": "die Anzahl der Personen hat sich geändert",
+		"fr": "le nombre de personnes a changé",
+		"es": "el número de personas ha cambiado",
+		"it": "il numero di persone è cambiato",
+		"pt": "o número de pessoas mudou",
+		"sv": "antalet personer har ändrats",
+		"da": "antallet af personer er ændret",
+		"no": "antall personer har endret seg",
+		"pl": "liczba osób uległa zmianie",
+		"ru": "число людей изменилось",
+		"ko": "사람 수가 변경되었습니다."
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionUltra"
+		}
+	]
+}
