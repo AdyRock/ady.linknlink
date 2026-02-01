@@ -49,13 +49,50 @@ module.exports = class LinknLink extends SimpleClass
 	{
 		super();
 		this.app = app;
-		this.broker = {};
-		this.broker.username = 'linknlinkuser';
-		this.broker.password = 'linknlinkpassword';
-		this.broker.port = 10883;
-		this.broker.wsport = 18888;
-		this.broker.url = 'mqtt://localhost';
-		this.broker.brokerid = 'LinknLinkLocalBroker';
+		let settingsChanged = false;
+		this.broker = this.app.homey.settings.get('brokerSettings') || {};
+		if (this.broker.useHomeyBroker === undefined)
+		{
+			this.broker.useHomeyBroker = true;
+			settingsChanged = true;
+		}
+
+		if (this.broker.username === undefined)
+		{
+			this.broker.username = 'linknlinkuser';
+			settingsChanged = true;
+		}
+		if (this.broker.password === undefined)
+		{
+			this.broker.password = 'linknlinkpassword';
+			settingsChanged = true;
+		}
+		if (!this.broker.port)
+		{
+			this.broker.port = 10883;
+			settingsChanged = true;
+		}
+		if (this.broker.wsport === undefined)
+		{
+			this.broker.wsport = 18888;
+			settingsChanged = true;
+		}
+		if (this.broker.url === undefined)
+		{
+			this.broker.url = 'mqtt://localhost';
+			settingsChanged = true;
+		}
+		if (this.broker.brokerid === undefined)
+		{
+			this.broker.brokerid = 'LinknLinkLocalBroker';
+			settingsChanged = true;
+		}
+
+		if (settingsChanged)
+		{
+			this.app.homey.settings.set('brokerSettings', this.broker);
+		}
+
 		this.mqttServerReady = false;
 		this.MQTTclient = null;
 
@@ -73,6 +110,11 @@ module.exports = class LinknLink extends SimpleClass
 
 	setupHomeyMQTTServer()
 	{
+		if (!this.broker.useHomeyBroker)
+		{
+			return;
+		}
+
 		// Setup the local MQTT server
 		aedes.authenticate = function aedesAuthenticate(client, username, password, callback)
 		{
@@ -184,7 +226,7 @@ module.exports = class LinknLink extends SimpleClass
 
 			this.MQTTclient.on('error', (err) =>
 			{
-				this.app.updateLog(`setupMQTTClient.onError: ${this.varToString(err)}`, 0);
+				this.app.updateLog(`setupMQTTClient.onError: ${this.app.varToString(err)}`, 0);
 			});
 
 			this.MQTTclient.on('message', async (topic, payloadBuf) =>
@@ -560,4 +602,28 @@ module.exports = class LinknLink extends SimpleClass
 	{
 		return this.devices;
 	}
+
+	changeBroker(body)
+	{
+		if (body.username !== undefined) this.broker.username = body.username;
+		if (body.password !== undefined) this.broker.password = body.password;
+		if (body.brokerURL) this.broker.url = `${body.brokerURL}`;
+		if (body.brokerPort) this.broker.port = body.brokerPort;
+		if (body.brokerWSPort) this.broker.wsport = body.brokerWSPort;
+		if (body.useHomeyBroker !== undefined) this.broker.useHomeyBroker = body.useHomeyBroker;
+
+		this.disconnectAllClientsAndClose();
+
+		if (this.broker.useHomeyBroker)
+		{
+			this.setupHomeyMQTTServer();
+		}
+		else
+		{
+			this.setupMQTTClient(this.broker, this.app.homeyID);
+		}
+
+		this.app.homey.settings.set('brokerSettings', this.broker);
+	}
+
 };

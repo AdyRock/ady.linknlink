@@ -32,4 +32,9 @@ module.exports = {
 		return homey.app.sendLog(body);
 	},
 
+	// Change MQTT Broker settings
+	async changeBroker({ homey, body })
+	{
+		return homey.app.changeBroker(body);
+	},
 };

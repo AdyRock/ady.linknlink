@@ -75,6 +75,11 @@
 			"method": "post",
 			"path": "/sendInfoLog",
 			"public": false
+		},
+		"changeBroker": {
+			"method": "post",
+			"path": "/changeBroker",
+			"public": false
 		}
 	},
 	"tags": {

@@ -66,7 +66,7 @@ module.exports = class eMotionUltraDevice extends Homey.Device
 		}
 
 		// Log the device status
-		// this.homey.app.updateLog(`eMotionUltraDevice MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
+		// this.homey.app.updateLog(`MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
 
 		if (mqttMessage.name === 'Any Presence')
 		{

@@ -233,4 +233,9 @@ module.exports = class LinknLink extends Homey.App
 		const deviceText = this.varToString(deviceList);
 		return deviceText;
 	}
+
+	changeBroker(body)
+	{
+		return this.linknLinkAPI.changeBroker(body);
+	}
 };

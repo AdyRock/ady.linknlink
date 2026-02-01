@@ -37,8 +37,57 @@
 
 	<!-- Tab links -->
 	<div class="tab">
-		<button class="tablinks" onclick="setPage(event, 'detected')" id="defaultOpen">Detected</button>
+		<button class="tablinks" onclick="setPage(event, 'settings')" id="defaultOpen"><span
+				data-i18n="settings.settings"></span></button>
+		<button class="tablinks" onclick="setPage(event, 'detected')">Detected</button>
 		<button class="tablinks" onclick="setPage(event, 'log')">Log</button>
+	</div>
+
+	<!-- Settings-->
+	<div id="settings" class="tabcontent">
+		<fieldset class="homey-form-fieldset">
+			<p id="introText" data-i18n="settings.intro"></p>
+			<p id="response"></p>
+			<fieldset class="homey-form-fieldset">
+				<legend class="homey-form-legend" data-i18n="settings.logintitle"></legend>
+				<span id="response"></span>
+				<label class="homey-form-checkbox">
+					<input class="homey-form-checkbox-input" id="useHomeyBroker" type="checkbox"
+						value="useHomeyBroker" />
+					<span class="homey-form-checkbox-checkmark"></span>
+					<span class="homey-form-checkbox-text"><span data-i18n="settings.useHomeyBroker"></span></span>
+				</label>
+				<div class="field row">
+					<label class="homey-form-label" for="brokerURL" data-i18n="settings.brokerURL"></label>
+					<input class="homey-form-input" id="brokerURL" type="text" value="" />
+				</div>
+				<div class="field row">
+					<label class="homey-form-label" for="brokerPort" data-i18n="settings.brokerPort"></label>
+					<input class="homey-form-input" id="brokerPort" type="text" value="" />
+				</div>
+				<div class="field row">
+					<label class="homey-form-label" for="brokerWSPort" data-i18n="settings.brokerWSPort"></label>
+					<input class="homey-form-input" id="brokerWSPort" type="text" value="" />
+				</div>
+				<div class="field row">
+					<label class="homey-form-label" for="username" data-i18n="settings.username"></label>
+					<input class="homey-form-input" id="username" type="text" value="" />
+				</div>
+				<div class="field row">
+					<label class="homey-form-label" for="password" data-i18n="settings.password"></label>
+					<input class="homey-form-input" id="password" type="password" value="" />
+					<label class="homey-form-checkbox">
+						<input class="homey-form-checkbox-input" id="showPassword" type="checkbox"
+							value="showPassword" />
+						<span class="homey-form-checkbox-checkmark"></span>
+						<span class="homey-form-checkbox-text"><span data-i18n="settings.show_password"></span></span>
+					</label>
+					<p></p>
+				</div>
+				<div class="field row">
+					<button class="homey-button-primary-full" id="saveButton" data-i18n="settings.save"></button>
+				</div>
+			</fieldset>
 	</div>
 
 	<!-- detected-->
@@ -63,7 +112,7 @@
 				<span class="homey-form-checkbox-checkmark"></span>
 				<span class="homey-form-checkbox-text"><span data-i18n="settings.enableLog"></span></span>
 				<div class="tooltip"><i class="fi fi-rr-info"></i>
-					<span class="tooltiptext" data-i18n="settings.enableLLogExplanation"></span>
+					<span class="tooltiptext" data-i18n="settings.enableLogExplanation"></span>
 				</div>
 			</label>
 			<div class="field row">
@@ -95,6 +144,17 @@
 		// Create the busy indicator
 		var busyi;
 		busyi = new busy_indicator(document.getElementById("busybox"), document.querySelector("#busybox div"));
+
+		// Settings tab
+		var saveButton = document.getElementById('saveButton');
+		var response = document.getElementById('response');
+		var usernameEl = document.getElementById('username');
+		var passwordEl = document.getElementById('password');
+		var showPasswordEl = document.getElementById('showPassword');
+		var brokerURLEl = document.getElementById('brokerURL');
+		var brokerPortEl = document.getElementById('brokerPort');
+		var brokerWSPortEl = document.getElementById('brokerWSPort');
+		var useHomeyBrokerEl = document.getElementById('useHomeyBroker');
 
 		var detectedDevicesElement = document.getElementById('detectedDevices');
 		var infoLogElement = document.getElementById('infoLog');
@@ -140,6 +200,104 @@
 			{
 				if (err) return Homey.alert(err);
 				logEnabledElement.checked = logEnabled;
+			});
+
+			Homey.get('brokerSettings', function (err, brokerSettings)
+			{
+				if (err) return Homey.alert(err);
+				useHomeyBrokerEl.checked = brokerSettings.useHomeyBroker;
+				brokerURLEl.value = brokerSettings.url;
+				brokerPortEl.value = brokerSettings.port;
+				brokerWSPortEl.value = brokerSettings.wsport;
+				usernameEl.value = brokerSettings.username;
+				passwordEl.value = brokerSettings.password;
+			});
+
+			useHomeyBrokerEl.addEventListener('click', function (e)
+			{
+				// Disable/enable the broker URL fields
+				brokerURLEl.disabled = useHomeyBrokerEl.checked;
+
+				// Fill in the HOMEY broker details if selected
+				if (useHomeyBrokerEl.checked)
+				{
+					brokerURLEl.value = "localhost";
+					brokerPortEl.value = "10883";
+					brokerWSPortEl.value = "18888";
+				}
+				else
+				{
+					brokerURLEl.value = "";
+					brokerPortEl.value = "";
+					brokerWSPortEl.value = "";
+				}
+			});
+
+			showPasswordEl.addEventListener('click', function (e)
+			{
+				if (passwordEl.type === "password")
+				{
+					passwordEl.type = "text";
+				}
+				else
+				{
+					passwordEl.type = "password";
+				}
+			});
+
+			saveButton.addEventListener('click', function ()
+			{
+				Object.values(document.querySelectorAll('*')).forEach(element => element.style.cursor = "wait");
+				response.innerHTML = __('settings.save_verifying');
+				const useHomeyBroker = useHomeyBrokerEl.checked;
+				const username = usernameEl.value;
+				const password = passwordEl.value; // Changed var to const for consistency
+				const brokerURL = brokerURLEl.value;
+				const brokerPort = brokerPortEl.value;
+				const brokerWSPort = brokerWSPortEl.value;
+
+				if (brokerURL.length < 7)
+				{
+					Object.values(document.querySelectorAll('*')).forEach(element => element.style.cursor = "default");
+					response.style.color = 'red';
+					response.innerHTML = __('settings.login_failure') + '<br/>' + __('settings.invalid_broker_ip');
+					return Homey.alert(__('settings.invalid_broker_ip'));
+				}
+				if (brokerPort.length < 2 || isNaN(brokerPort))
+				{
+					Object.values(document.querySelectorAll('*')).forEach(element => element.style.cursor = "default");
+					response.style.color = 'red';
+					response.innerHTML = __('settings.login_failure') + '<br/>' + __('settings.invalid_broker_port');
+					return Homey.alert(__('settings.invalid_broker_port'));
+				}
+				if (brokerWSPort.length < 2 || isNaN(brokerWSPort))
+				{
+					Object.values(document.querySelectorAll('*')).forEach(element => element.style.cursor = "default");
+					response.style.color = 'red';
+					response.innerHTML = __('settings.login_failure') + '<br/>' + __('settings.invalid_broker_wsport');
+					return Homey.alert(__('settings.invalid_broker_wsport'));
+				}
+
+				Homey.api('POST', '/changeBroker/',
+					{
+						"useHomeyBroker": useHomeyBroker,
+						"username": username,
+						"password": password,
+						"brokerURL": brokerURL,
+						"brokerPort": brokerPort,
+						"brokerWSPort": brokerWSPort
+					}, function (err, result)
+				{
+					Object.values(document.querySelectorAll('*')).forEach(element => element.style.cursor = "default");
+					if (err)
+					{
+						response.style.color = 'red';
+						response.innerHTML = __('settings.login_failure') + '<br/>' + err;
+						return Homey.alert(err);
+					}
+					response.style.color = 'green';
+					response.innerHTML = __('settings.login_success');
+				});
 			});
 
 			logEnabledElement.addEventListener('change', function (e)

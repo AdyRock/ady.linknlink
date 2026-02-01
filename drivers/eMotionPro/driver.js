@@ -2,7 +2,7 @@
 
 const LinknLinkDriver = require('../linknlinkDriver');
 
-module.exports = class EProMotionProDriver extends LinknLinkDriver
+module.exports = class eMotionProDriver extends LinknLinkDriver
 {
 	/**
 	 * onInit is called when the driver is initialized.
@@ -10,7 +10,7 @@ module.exports = class EProMotionProDriver extends LinknLinkDriver
 	async onInit()
 	{
 		this.deviceType = 'eMotion Pro';
-		this.homey.app.updateLog('EProMotionProDriver has been initialized');
+		this.homey.app.updateLog('eMotionProDriver has been initialized');
 	}
 
 	getIcon(modelNumber)
