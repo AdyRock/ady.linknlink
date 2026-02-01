@@ -647,6 +647,10 @@
       "capabilities": [
         "alarm_presence",
         "measure_people_count",
+        "measure_temperature",
+        "measure_humidity",
+        "measure_luminance",
+        "measure_signal_strength",
         "alarm_presence.zone1",
         "measure_people_count.zone1",
         "alarm_presence.zone2",
@@ -654,11 +658,7 @@
         "alarm_presence.zone3",
         "measure_people_count.zone3",
         "alarm_presence.zone4",
-        "measure_people_count.zone4",
-        "measure_temperature",
-        "measure_humidity",
-        "measure_luminance",
-        "measure_signal_strength"
+        "measure_people_count.zone4"
       ],
       "capabilitiesOptions": {
         "alarm_presence.zone1": {
