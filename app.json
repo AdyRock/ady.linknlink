@@ -48,9 +48,9 @@
   "bugs": {
     "url": "https://github.com/AdyRock/com.linknlink/issues"
   },
-  "homepage": "https://shop.yosmart.com/",
+  "homepage": "https://www.linknlink.com/sensors",
   "support": "https://github.com/AdyRock/com.linknlink/issues",
-  "homeyCommunityTopicId": 143373,
+  "homeyCommunityTopicId": 150691,
   "api": {
     "getDeviceLog": {
       "method": "get",

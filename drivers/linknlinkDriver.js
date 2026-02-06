@@ -43,7 +43,7 @@ module.exports = class LinknLinkDriver extends Homey.Driver
 
 	async getState(data, settings)
 	{
-		// return this.homey.app.yoLinkAPI.getDeviceStatus(data.UAID, data.model, data.id, data.deviceToken, settings.serviceZone);
+		// return this.homey.app.linknlink.getDeviceStatus(data.UAID, data.model, data.id, data.deviceToken, settings.serviceZone);
 	}
 
 };

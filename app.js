@@ -283,7 +283,7 @@ module.exports = class LinknLink extends Homey.App
 						from: `"Homey User" <${Homey.env.MAIL_USER}>`, // sender address
 						to: Homey.env.MAIL_RECIPIENT, // list of receivers
 						cc: email,
-						subject: `YoLink log (${Homey.manifest.version})`, // Subject line
+						subject: `LinknLink log (${Homey.manifest.version})`, // Subject line
 						text: `${email}\n${description}\n\n${log}`, // plain text body
 					},
 				);

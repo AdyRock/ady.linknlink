@@ -4,7 +4,7 @@
 'use strict';
 
 /** *******************************************************************************
-** YoLink API interface ***
+** LinknLink API interface ***
 ** See http://doc.yosmart.com/docs/protocol/openAPIV2/en.html for details  **
 ******************************************************************************** */
 const
@@ -12,9 +12,9 @@ const
 		SimpleClass,
 	} = require('homey');
 
-const net = require('./net');
-const ws = require('websocket-stream');
 const httpServer = require('http').createServer();
+const ws = require('websocket-stream');
+const net = require('./net');
 const aedes = require('./aedes')();
 const mqtt = require('./mqtt');
 
@@ -455,12 +455,12 @@ module.exports = class LinknLink extends SimpleClass
 
 	handleEntityAvailability(entityKey, payloadStr)
 	{
-		const ent = this.entities.get(entityKey);
-		if (!ent) return;
+		// const ent = this.entities.get(entityKey);
+		// if (!ent) return;
 
 		// LinknLink often uses "online"/"offline" or 1/0 — depends on firmware.
-		const v = payloadStr.replace(/"/g, '').toLowerCase();
-		const isOnline = v === 'online' || v === '1' || v === 'true';
+		// const v = payloadStr.replace(/"/g, '').toLowerCase();
+		// const isOnline = v === 'online' || v === '1' || v === 'true';
 
 		//		this.app.updateLog(`[avail] ${entityKey} => ${isOnline ? 'online' : 'offline'}`);
 
@@ -592,7 +592,7 @@ module.exports = class LinknLink extends SimpleClass
 			const raw = Number(json[key]);
 			if (!Number.isFinite(raw) || !Number.isFinite(factor)) return undefined;
 			const scaled = raw * factor;
-			const p = Math.pow(10, decimals);
+			const p = 10 ** decimals;
 			return Math.round(scaled * p) / p;
 		}
 
