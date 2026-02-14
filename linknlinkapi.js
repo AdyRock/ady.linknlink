@@ -158,7 +158,7 @@ module.exports = class LinknLink extends SimpleClass
 
 		this.server.on('error', (err) =>
 		{
-			this.app.updateLog(`server error: ${this.varToString(err)}`, 0);
+			this.app.updateLog(`server error: ${this.app.varToString(err)}`, 0);
 		});
 
 		// Create a websocket server for the MQTT server
@@ -185,7 +185,7 @@ module.exports = class LinknLink extends SimpleClass
 
 		this.wsServer.on('error', (err) =>
 		{
-			this.app.updateLog(`websocket server error: ${this.varToString(err)}`, 0);
+			this.app.updateLog(`websocket server error: ${this.app.varToString(err)}`, 0);
 		});
 
 		this.wsServer.on('connection', (socket) =>
@@ -195,7 +195,7 @@ module.exports = class LinknLink extends SimpleClass
 
 		this.wsServer.on('message', (message) =>
 		{
-			this.app.updateLog(`websocket server message: ${this.varToString(message)}`);
+			this.app.updateLog(`websocket server message: ${this.app.varToString(message)}`);
 		});
 	}
 
@@ -217,7 +217,7 @@ module.exports = class LinknLink extends SimpleClass
 				{
 					if (err)
 					{
-						this.app.updateLog(`subscribe discovery error: ${this.varToString(err)}`);
+						this.app.updateLog(`subscribe discovery error: ${this.app.varToString(err)}`);
 					}
 					else
 					{
