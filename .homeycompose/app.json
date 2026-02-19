@@ -1,6 +1,6 @@
 {
 	"id": "ady.linknlink",
-	"version": "0.0.2",
+	"version": "1.0.0",
 	"compatibility": ">=12.5.0",
 	"sdk": 3,
 	"platforms": [

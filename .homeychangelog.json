@@ -4,5 +4,8 @@
 	},
 	"0.0.2": {
 		"en": "Fix logging for discovery errors."
+	},
+	"1.0.0": {
+		"en": "Updated icons and initial release on Homey v12."
 	}
 }
