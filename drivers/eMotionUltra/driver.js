@@ -9,7 +9,7 @@ module.exports = class eMotionUltraDriver extends LinknLinkDriver
 	 */
 	async onInit()
 	{
-		this.deviceType = 'eMotion Ultra';
+		this.deviceType = ['eMotion Ultra', 'eMotion Ultra2'];
 		this.homey.app.updateLog('eMotionUltraDriver has been initialized');
 	}
 
