@@ -1,0 +1,11 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "OK"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "insights": false,
+  "icon": "/assets/ok.svg"
+}

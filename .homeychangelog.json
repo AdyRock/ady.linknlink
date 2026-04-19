@@ -13,5 +13,8 @@
 	},
 	"1.0.2": {
 		"en": "Added support for eMotion Ultra2."
+	},
+	"1.0.3": {
+		"en": "Added support for new AC and TV remote drivers and updated flow cards to use them."
 	}
 }

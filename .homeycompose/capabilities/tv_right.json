@@ -1,0 +1,11 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Right"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "insights": false,
+  "icon": "/assets/right-button.svg"
+}

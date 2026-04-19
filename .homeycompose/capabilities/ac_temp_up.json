@@ -1,0 +1,11 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Temp Up"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "insights": false,
+  "icon": "/assets/up-button.svg"
+}

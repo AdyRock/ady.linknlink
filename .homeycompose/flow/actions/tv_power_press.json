@@ -1,0 +1,12 @@
+{
+	"title": {
+		"en": "Press Power"
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=tv"
+		}
+	]
+}

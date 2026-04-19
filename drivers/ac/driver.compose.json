@@ -1,0 +1,23 @@
+{
+	"name": {
+		"en": "AC Remote"
+	},
+	"class": "airconditioning",
+	"capabilities": [
+		"onoff",
+		"target_temperature",
+		"ac_mode",
+		"ac_fan"
+	],
+	"capabilitiesOptions": {
+		"target_temperature": {
+			"min": 16,
+			"max": 32,
+			"step": 1,
+			"decimals": 0
+		}
+	},
+	"$extends": [
+		"localDriver"
+	]
+}

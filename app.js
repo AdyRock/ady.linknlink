@@ -36,6 +36,63 @@ module.exports = class LinknLink extends Homey.App
 		this.measure_people_count_zone3_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone3_changed');
 		this.measure_people_count_zone4_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone4_changed');
 
+		const tvActionMap = {
+			tv_power_press: 'tv_power',
+			tv_av_press: 'tv_av',
+			tv_home_press: 'tv_home',
+			tv_back_press: 'tv_back',
+			tv_menu_press: 'tv_menu',
+			tv_ok_press: 'tv_ok',
+			tv_up_press: 'tv_up',
+			tv_down_press: 'tv_down',
+			tv_left_press: 'tv_left',
+			tv_right_press: 'tv_right',
+			tv_mute_press: 'tv_mute',
+		};
+
+		for (const [cardId, capability] of Object.entries(tvActionMap))
+		{
+			const card = this.homey.flow.getActionCard(cardId);
+			card.registerRunListener(async ({ device }) =>
+			{
+				if (!device || !device.hasCapability(capability))
+				{
+					throw new Error(`Device does not support capability ${capability}`);
+				}
+
+				await device.handleCapabilityChange(capability, true);
+				return true;
+			});
+		}
+
+		const acActionMap = {
+			ac_mode_press: { capability: 'ac_mode', argName: 'mode' },
+			ac_fan_press: { capability: 'ac_fan', argName: 'fan' },
+		};
+
+		for (const [cardId, actionConfig] of Object.entries(acActionMap))
+		{
+			const card = this.homey.flow.getActionCard(cardId);
+			card.registerRunListener(async (args) =>
+			{
+				const { device } = args;
+				const { capability, argName } = actionConfig;
+				if (!device || !device.hasCapability(capability))
+				{
+					throw new Error(`Device does not support capability ${capability}`);
+				}
+
+				const selectedValue = args[argName];
+				if (!selectedValue || typeof selectedValue !== 'string')
+				{
+					throw new Error(`Please select a valid ${argName} value`);
+				}
+
+				await device.handleCapabilityChange(capability, selectedValue);
+				return true;
+			});
+		}
+
 		this.homey.settings.on('set', async (setting) =>
 		{
 		});

@@ -1,0 +1,11 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "TV/AV"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "insights": false,
+  "icon": "/assets/tv-av.svg"
+}

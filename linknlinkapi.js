@@ -39,6 +39,28 @@ const desiredComponents = [
 	'area_2',
 	'area_3',
 	'area_4',
+	'power',
+	'tv_av',
+	'home',
+	'back',
+	'menu',
+	'ok',
+	'up',
+	'down',
+	'left',
+	'right',
+	'volume_up',
+	'volume_down',
+	'mute',
+	'channel_up',
+	'channel_down',
+	'AC from eMotion Ultra',
+	'AC from eMotion Ultra2',
+	'ac_power',
+	'ac_mode',
+	'ac_fan',
+	'ac_temp_up',
+	'ac_temp_down',
 ];
 
 const DISCOVERY_PREFIX = 'homeassistant'; // default HA discovery prefix
@@ -515,7 +537,7 @@ module.exports = class LinknLink extends SimpleClass
 		}
 
 		// Map entity to capability and update value
-		device.processMQTTMessage(ent, normalized);
+		device.processMQTTMessage(ent, normalized, payloadStr, json);
 	}
 
 	flushPendingMessagesForDevice(deviceId)

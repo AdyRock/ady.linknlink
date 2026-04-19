@@ -1,0 +1,26 @@
+{
+	"name": {
+		"en": "TV"
+	},
+	"class": "tv",
+	"capabilities": [
+		"volume_up",
+		"volume_down",
+		"channel_up",
+		"channel_down",
+		"tv_mute",
+		"tv_power",
+		"tv_av",
+		"tv_home",
+		"tv_menu",
+		"tv_ok",
+		"tv_up",
+		"tv_down",
+		"tv_left",
+		"tv_right",
+		"tv_back"
+	],
+	"$extends": [
+		"localDriver"
+	]
+}
