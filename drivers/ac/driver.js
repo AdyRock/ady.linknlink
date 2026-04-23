@@ -9,17 +9,21 @@ module.exports = class ACRemoteDriver extends LinknLinkDriver
 	 */
 	async onInit()
 	{
-		this.deviceType = [
-			' from eMotion Ultra',
-			' from eMotion Ultra2',
-			'AC from eMotion Ultra',
-			'AC from eMotion Ultra2',
-			'AC Remote from eMotion Ultra',
-			'AC Remote from eMotion Ultra2',
-			'Air Conditioner from eMotion Ultra',
-			'Air Conditioner from eMotion Ultra2',
-		];
+		this.deviceType = '';
 		this.homey.app.updateLog('ACRemoteDriver has been initialized');
+	}
+
+	findModelTraits(device)
+	{
+		// the AC remote has different traits for different models, so we need to find the traits based on the entities array of the device
+		// So for an AC remote we need to check if there is a 'climate:*' where the * is the deviceId.
+		const entities = Array.from(device.entities);
+		if (entities.some((entity) => (entity.startsWith(`climate:${device.deviceId}`))))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	getIcon(modelNumber)

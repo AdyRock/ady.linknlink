@@ -24,10 +24,11 @@ module.exports = class LinknLinkDriver extends Homey.Driver
 			// deviceList is a Map, so get the device objects from its values
 			const devices = Array.from(deviceList.values());
 
-			// Filter the list to just include devices of this type
+			// Filter the list to just include devices of this type. If the this.deviceType id '' then call the findModelTraits function to check if the device has the traits of this driver.
+			// If the this.deviceType is an array then check if the device model is included in the array. If the this.deviceType is a string then check if the device model is equal to the string.
 			const filteredList = devices.filter((device) => (Array.isArray(this.deviceType)
 				? this.deviceType.includes(device.model)
-				: device.model === this.deviceType));
+				: device.model === this.deviceType || (this.deviceType === '' && this.findModelTraits(device))));
 			return filteredList.map((device) => ({
 				name: device.name,
 				data:

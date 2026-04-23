@@ -9,14 +9,31 @@ module.exports = class TVDriver extends LinknLinkDriver
 	 */
 	async onInit()
 	{
-		this.deviceType = ['TV from eMotion Ultra', 'TV from eMotion Ultra2'];
+		this.deviceType = '';
 		this.homey.app.updateLog('TV Driver has been initialized');
+	}
+
+	findModelTraits(device)
+	{
+		// the TV has different traits for different models, so we need to find the traits based on the entities array of the device
+		// So for a TV we need to check if there is a 'button:*_tv_av' or 'button:*channel_up' entity where the * is the deviceId.
+		const entities = Array.from(device.entities);
+
+		if (entities.some((entity) => entity.startsWith(`button:${device.deviceId}_tv_av`)))
+		{
+			return true;
+		}
+		if (entities.some((entity) => entity.startsWith(`button:${device.deviceId}_channel_up`)))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	getIcon(modelNumber)
 	{
-		// the TV has different icons for different models that are stored in the root/assets folder
-		// remove the '-' suffix if present
+		// uses the driver icon
 	}
 
 };
