@@ -16,5 +16,8 @@
 	},
 	"1.0.3": {
 		"en": "Added support for new AC and TV remote drivers and updated flow cards to use them."
+	},
+	"1.0.4": {
+		"en": "Change method to find model traits for AC and TV devices."
 	}
 }
