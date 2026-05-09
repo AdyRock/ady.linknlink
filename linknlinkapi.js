@@ -12,7 +12,7 @@ const
 		SimpleClass,
 	} = require('homey');
 
-const httpServer = require('http').createServer();
+const http = require('http');
 const ws = require('websocket-stream');
 const net = require('./net');
 const aedes = require('./aedes')();
@@ -117,6 +117,9 @@ module.exports = class LinknLink extends SimpleClass
 
 		this.mqttServerReady = false;
 		this.MQTTclient = null;
+		this.httpServer = null;
+		this.server = null;
+		this.wsServer = null;
 
 		// key: `${component}:${unique_id || node_id}/${object_id}`
 		this.entities = new Map();
@@ -171,10 +174,16 @@ module.exports = class LinknLink extends SimpleClass
 			if (err.code === 'ERR_SERVER_ALREADY_LISTEN')
 			{
 				this.app.updateLog(`server already listening on port ${this.broker.port}`);
+
+				// Start the MQTT client
+				this.setupMQTTClient(this.broker, this.app.homeyID);
 			}
 			else if (err.code === 'EADDRINUSE')
 			{
 				this.app.updateLog(`server address in use on port ${this.broker.port}`);
+
+				// Start the MQTT client
+				this.setupMQTTClient(this.broker, this.app.homeyID);
 			}
 		}
 
@@ -183,12 +192,17 @@ module.exports = class LinknLink extends SimpleClass
 			this.app.updateLog(`server error: ${this.app.varToString(err)}`, 0);
 		});
 
+		if (!this.httpServer)
+		{
+			this.httpServer = http.createServer();
+		}
+
 		// Create a websocket server for the MQTT server
-		this.wsServer = ws.createServer({ server: httpServer }, aedes.handle);
+		this.wsServer = ws.createServer({ server: this.httpServer }, aedes.handle);
 
 		try
 		{
-			httpServer.listen(this.broker.wsport, () =>
+			this.httpServer.listen(this.broker.wsport, () =>
 			{
 				this.app.updateLog(`websocket server listening on port ${this.broker.wsport}`);
 			});
@@ -228,11 +242,18 @@ module.exports = class LinknLink extends SimpleClass
 			// Connect to the MQTT server and subscribe to the required topics
 			// this.MQTTclient = mqtt.connect(MQTT_SERVER, { clientId: `HomeyLinknLinkApp-${homeyID}`, username: Homey.env.MQTT_USER_NAME, password: Homey.env.MQTT_PASSWORD });
 			this.app.updateLog(`setupMQTTClient connect: ${brokerConfig.url}:${brokerConfig.port}`, 1);
-			this.MQTTclient = mqtt.connect(`${brokerConfig.url}:${brokerConfig.port}`, { clientId: `HomeyLinknLinkApp-${homeyID}`, username: brokerConfig.username, password: brokerConfig.password });
+			let brokerURL = brokerConfig.url;
+			if (!brokerURL.startsWith('mqtt://') && !brokerURL.startsWith('mqtts://') && !brokerURL.startsWith('ws://') && !brokerURL.startsWith('wss://'))
+			{
+				brokerURL = `mqtt://${brokerURL}`;
+				this.app.updateLog(`setupMQTTClient: prepended mqtt:// to broker URL, now ${brokerURL}`, 1);
+			}
+
+			this.MQTTclient = mqtt.connect(`${brokerURL}:${brokerConfig.port}`, { clientId: `HomeyLinknLinkApp-${homeyID}`, username: brokerConfig.username, password: brokerConfig.password });
 
 			this.MQTTclient.on('connect', () =>
 			{
-				this.app.updateLog(`setupMQTTClient.onConnect: connected to ${brokerConfig.url}:${brokerConfig.port} as ${brokerConfig.brokerid}`);
+				this.app.updateLog(`setupMQTTClient.onConnect: connected to ${brokerURL}:${brokerConfig.port} as ${brokerConfig.brokerid}`);
 
 				// Subscribe to HA discovery
 				this.MQTTclient.subscribe(`${DISCOVERY_PREFIX}/#`, { qos: 0 }, (err) =>
@@ -291,16 +312,40 @@ module.exports = class LinknLink extends SimpleClass
 
 	disconnectAllClientsAndClose()
 	{
-		// Iterate through all connected clients and disconnect them
-		aedes.close(() =>
+		if (this.MQTTclient)
 		{
-			// server.close();
-			// wsServer.close();
-			// httpServer.close();
+			this.MQTTclient.removeAllListeners();
+			this.MQTTclient.end(true);
+			this.MQTTclient = null;
+		}
+
+		if (this.wsServer)
+		{
+			this.wsServer.close();
+			this.wsServer = null;
+		}
+
+		if (this.httpServer && this.httpServer.listening)
+		{
+			this.httpServer.close();
+			this.httpServer = null;
+		}
+
+		if (this.server && this.server.listening)
+		{
+			this.server.close();
+			this.server = null;
+		}
+
+		aedes.close((err) =>
+		{
+			if (err)
+			{
+				this.app.updateLog(`aedes close error: ${this.app.varToString(err)}`, 0);
+			}
 		});
 
-		this.server = null;
-		this.wsServer = null;
+		this.mqttServerReady = false;
 	}
 
 	// eslint-disable-next-line camelcase

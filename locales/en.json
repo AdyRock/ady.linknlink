@@ -23,8 +23,9 @@
 		"username": "Username",
 		"password": "Password",
 		"show_password": "Show Password",
-		"brokerIP": "Broker URL or IP Address",
+		"brokerURL": "Broker URL or IP Address",
 		"brokerPort": "Broker Port",
+		"brokerWSPort": "Broker Websocket Port",
 		"useHomeyBroker": "Use Homey built-in MQTT broker"
 	}
 }

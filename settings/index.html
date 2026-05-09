@@ -211,6 +211,9 @@
 				brokerWSPortEl.value = brokerSettings.wsport;
 				usernameEl.value = brokerSettings.username;
 				passwordEl.value = brokerSettings.password;
+
+				// Apply disable state based on useHomeyBroker setting
+				brokerURLEl.disabled = useHomeyBrokerEl.checked;
 			});
 
 			useHomeyBrokerEl.addEventListener('click', function (e)
