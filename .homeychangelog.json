@@ -19,5 +19,8 @@
 	},
 	"1.0.4": {
 		"en": "Change method to find model traits for AC and TV devices."
+	},
+	"1.0.5": {
+		"en": "Fixed localhost setting in MQTT broker configuration so it doesn't need the mqtt:// prefix. Fixed closedown of internal broker when changing settings so it can restart correctly."
 	}
 }
