@@ -25,5 +25,8 @@
 	},
 	"1.0.6": {
 		"en": "Fixed crash when trying to start internal MQTT broker if the configured port is already in use. Added error handling and logging for this case, and added a warning message in the settings UI to explain the issue."
+	},
+	"1.0.7": {
+		"en": "Added a Guide section to the settings page with troubleshooting tips and instructions on how to get the most useful information in logs when asking for help with setup issues."
 	}
 }
