@@ -1,0 +1,84 @@
+LinknLink eMotion Field Test Checklist (Original eMotion)
+
+Purpose
+- Verify pairing and runtime MQTT mapping for original eMotion devices.
+- Capture enough evidence to refine support if any values are missing.
+
+Before You Start
+1. Update this Homey app to the latest test build that includes the eMotion driver.
+2. Ensure the eMotion device is online in the LinknLink mobile app.
+3. Ensure eMotion MQTT is enabled in the LinknLink app:
+   - Open device page.
+   - Tap "..." (top right).
+   - Open "MQTT Connection".
+   - Enter broker details and Save.
+   - Reopen "MQTT Connection" and confirm status is "Connected".
+4. In Homey app Settings, enable "Log Enabled".
+
+Broker Configuration Cross-Check
+1. Confirm these values match between LinknLink app and Homey app Settings:
+   - Broker host/IP
+   - Broker port
+   - Username
+   - Password
+2. If using the Homey built-in broker, keep Homey settings at localhost and default ports unless intentionally changed.
+
+Pairing Test
+1. Open Homey device add flow and select this app.
+2. Attempt to pair the original eMotion.
+3. Confirm whether device appears as "eMotion".
+4. If the device does not appear:
+   - Wait 60 seconds.
+   - Reopen Add Device and try again.
+   - Continue to "Required Logs" below.
+
+Capability Test (After Pairing)
+1. Presence:
+   - Walk into view and then leave.
+   - Confirm alarm_presence toggles correctly.
+2. Luminance:
+   - Change lighting in the room.
+   - Confirm measure_luminance updates.
+3. Temperature and Humidity:
+   - Confirm measure_temperature and measure_humidity values are present and update over time.
+4. Signal strength:
+   - Confirm measure_signal_strength has a value.
+
+Flow Trigger Test
+1. Create a simple flow for presence changed (for the paired eMotion device).
+2. Trigger presence change and confirm flow runs.
+
+Required Logs to Capture
+Capture logs from the app after each step above. Include at least:
+1. Pairing logs showing discovered/matched device model.
+2. Any log line containing:
+   - "eMotionDriver matched model"
+   - "No capability mapping for device"
+   - "processMQTTMessage error"
+3. A short note of what action was happening when each log line appeared.
+
+If Something Fails
+1. Pairing fails (device not listed):
+   - Capture all logs from app startup to pairing attempt.
+2. Device pairs but missing capabilities:
+   - Note exactly which capabilities are missing.
+   - Capture logs during a 2-3 minute period while triggering motion/light changes.
+3. Values are wrong or stale:
+   - Capture time of test and the expected vs actual values.
+
+Report Template
+- Homey app version:
+- Homey firmware version:
+- Device model name shown in LinknLink app:
+- Broker type: built-in Homey / external
+- Pairing result: success / failed
+- Working capabilities:
+- Missing capabilities:
+- Relevant log excerpt:
+- Reproduction steps:
+
+Done Criteria
+- Device pairs as eMotion.
+- Presence and luminance update reliably.
+- Temperature/humidity and signal strength are present.
+- No recurring mapping errors in logs during normal operation.

@@ -1,0 +1,16 @@
+{
+	"name": {
+		"en": "eMotion"
+	},
+	"class": "sensor",
+	"capabilities": [
+		"alarm_presence",
+		"measure_temperature",
+		"measure_humidity",
+		"measure_luminance",
+		"measure_signal_strength"
+	],
+	"$extends": [
+		"localDriver"
+	]
+}

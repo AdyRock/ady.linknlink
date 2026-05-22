@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LinknLink Setup Guide</title>
+	<link rel="stylesheet" type="text/css" href="lwsa.css">
+	<link rel="stylesheet" type="text/css" href="extraStyles.css">
+	<style>
+		body {
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			margin: 0;
+			padding: 16px;
+			line-height: 1.45;
+			color: #1d1d1d;
+			background: #f7fbff;
+		}
+
+		.guide {
+			max-width: 980px;
+			margin: 0 auto;
+			background: #ffffff;
+			border: 1px solid #d9e4f2;
+			border-radius: 10px;
+			padding: 20px;
+			box-shadow: 0 6px 20px rgba(16, 40, 80, 0.08);
+		}
+
+		h1,
+		h2,
+		h3 {
+			margin-top: 0;
+			color: #18406e;
+		}
+
+		h2 {
+			margin-top: 20px;
+			padding-top: 12px;
+			border-top: 1px solid #e5edf7;
+		}
+
+		code {
+			background: #eef4fb;
+			padding: 1px 4px;
+			border-radius: 4px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 10px 0 14px;
+		}
+
+		th,
+		td {
+			border: 1px solid #d9e4f2;
+			padding: 8px;
+			vertical-align: top;
+		}
+
+		th {
+			background: #f0f6ff;
+			text-align: left;
+		}
+
+		.note {
+			padding: 10px 12px;
+			background: #fff8e5;
+			border: 1px solid #f2dfaa;
+			border-radius: 6px;
+			margin: 10px 0;
+		}
+
+		.small {
+			font-size: 0.92rem;
+			color: #3d4a5c;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="guide">
+		<h1>LinknLink App Setup Guide (Homey + LinknLink)</h1>
+		<p>This guide covers complete setup for LinknLink devices with Homey using MQTT, including the LinknLink mobile app side.</p>
+
+		<h2>1. Prerequisites</h2>
+		<ol>
+			<li>Homey Pro running this LinknLink app.</li>
+			<li>LinknLink mobile app installed and device already added there.</li>
+			<li>Your LinknLink device online on your LAN.</li>
+			<li>An MQTT broker ready (either Homey built-in broker from this app, or external broker).</li>
+		</ol>
+
+		<h2>2. LinknLink Mobile App Steps (Required)</h2>
+		<ol>
+			<li>Open LinknLink mobile app and open the target device.</li>
+			<li>Tap the <code>...</code> menu (top-right corner).</li>
+			<li>Open <strong>MQTT Connection</strong>.</li>
+			<li>Enter broker details that match Homey app settings exactly.</li>
+			<li>Tap <strong>Save</strong>.</li>
+			<li>Reopen MQTT Connection and confirm status shows <strong>Connected</strong>.</li>
+		</ol>
+		<div class="note">
+			<strong>Important:</strong> If the LinknLink device is not connected to MQTT, Homey cannot discover entities from it.
+		</div>
+
+		<h2>3. Homey App Settings</h2>
+		<p>Open the app settings page in Homey and configure broker credentials.</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Setting</th>
+					<th>Meaning</th>
+					<th>Typical values</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Use app's built-in MQTT broker</td>
+					<td>Runs local broker inside Homey app.</td>
+					<td>Enabled for easiest setup.</td>
+				</tr>
+				<tr>
+					<td>Broker URL / IP</td>
+					<td>Host of the MQTT broker.</td>
+					<td><code>localhost</code> (built-in) or LAN IP (external).</td>
+				</tr>
+				<tr>
+					<td>Broker Port</td>
+					<td>MQTT TCP port used by Homey app client and LinknLink devices.</td>
+					<td>Built-in default in this app is <code>10883</code>.</td>
+				</tr>
+				<tr>
+					<td>Broker WebSocket Port</td>
+					<td>MQTT WebSocket listener for WS clients.</td>
+					<td>Built-in default in this app is <code>18888</code>.</td>
+				</tr>
+				<tr>
+					<td>Username / Password</td>
+					<td>Broker auth details.</td>
+					<td>Must match what you set in LinknLink app device MQTT settings.</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h2>4. Built-in Broker vs External Broker</h2>
+		<div class="note">
+			<strong>Important distinction:</strong> <code>Use app's built-in MQTT broker</code> only applies if you want to use the broker embedded inside this LinknLink app itself. If you are using any other broker, including a separate broker running on Homey, that counts as the <strong>External Broker</strong> setup and this option should be disabled.
+		</div>
+		<h3>Built-in Broker (recommended for most users)</h3>
+		<ol>
+			<li>Enable <code>Use app's built-in MQTT broker</code> only when you want this app to host the MQTT broker.</li>
+			<li>Keep defaults unless needed: <code>localhost</code>, <code>10883</code>, <code>18888</code>.</li>
+			<li>Use same credentials in LinknLink app MQTT Connection.</li>
+		</ol>
+
+		<h3>External Broker (advanced)</h3>
+		<ol>
+			<li>Disable <code>Use app's built-in MQTT broker</code>.</li>
+			<li>Set external broker IP/host and port.</li>
+			<li>If the broker is running elsewhere on Homey rather than inside this app, still use this external broker setup.</li>
+			<li>Set matching credentials in both Homey settings and LinknLink app.</li>
+			<li>Ensure Homey and LinknLink devices can reach that broker on the network.</li>
+		</ol>
+
+		<h2>5. Save and Confirm</h2>
+		<ol>
+			<li>Click <strong>Save Settings</strong> in Homey app settings.</li>
+			<li>You should see success feedback and a reminder message.</li>
+			<li>If broker warning appears, check that selected port is not already in use.</li>
+		</ol>
+
+		<h2>6. Pair Device in Homey</h2>
+		<ol>
+			<li>Go to Add Device in Homey.</li>
+			<li>Select this LinknLink app.</li>
+			<li>Choose and pair discovered device(s).</li>
+		</ol>
+		<p class="small">Supported drivers currently include eMotion Pro, eMotion Ultra/Ultra2, TV remote, AC remote, and a new trait-based eMotion path for original eMotion models.</p>
+
+		<h2>7. Verify Data and Flows</h2>
+		<ol>
+			<li>Presence updates should toggle when motion/presence changes.</li>
+			<li>Light, temperature, humidity, and signal values should update when available.</li>
+			<li>Create a basic flow on presence change and test.</li>
+		</ol>
+
+		<h2>8. Troubleshooting</h2>
+		<h3>Device not discovered in Homey</h3>
+		<ul>
+			<li>Confirm LinknLink app device MQTT status is <strong>Connected</strong>.</li>
+			<li>Confirm broker host/port/user/pass match exactly in both apps.</li>
+			<li>Enable logs in Homey settings and retry pairing.</li>
+		</ul>
+
+		<h3>Broker warning in Homey settings</h3>
+		<ul>
+			<li>TCP port in use: change broker port or stop conflicting service.</li>
+			<li>WebSocket port in use: change WS port or stop conflicting service.</li>
+			<li>If you are not using the broker built into this app, disable <code>Use app's built-in MQTT broker</code> and follow the External Broker setup instead.</li>
+		</ul>
+
+		<h3>Device pairs but some values missing</h3>
+		<ul>
+			<li>Check app log for mapping diagnostics and share those lines with the maintainer.</li>
+			<li>Relevant log patterns include:</li>
+		</ul>
+		<ul>
+			<li><code>eMotionDriver matched model ... using traits ...</code></li>
+			<li><code>No capability mapping for device ... entity ... component ...</code></li>
+			<li><code>processMQTTMessage error ...</code></li>
+		</ul>
+
+		<h2>9. Recommended Test Report for Users</h2>
+		<ul>
+			<li>Homey app version and Homey firmware version.</li>
+			<li>Exact LinknLink model name shown in LinknLink app.</li>
+			<li>Broker mode (built-in or external) and ports used.</li>
+			<li>What works vs what is missing.</li>
+			<li>Relevant app log excerpt around pairing and first data updates.</li>
+		</ul>
+
+		<p class="small">Tip: Keep this guide open beside the settings page while doing setup, and work section by section. Most integration issues come from a broker mismatch or MQTT not connected on the LinknLink side.</p>
+	</div>
+</body>
+
+</html>

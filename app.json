@@ -735,6 +735,44 @@
           "template": "add_devices"
         }
       ],
+      "icon": "/drivers/eMotion/assets/icon.svg",
+      "images": {
+        "large": "/drivers/eMotion/assets/images/large.jpg",
+        "small": "/drivers/eMotion/assets/images/small.jpg"
+      },
+      "name": {
+        "en": "eMotion"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_presence",
+        "measure_temperature",
+        "measure_humidity",
+        "measure_luminance",
+        "measure_signal_strength"
+      ],
+      "id": "eMotion"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
       "icon": "/drivers/eMotionPro/assets/icon.svg",
       "images": {
         "large": "/drivers/eMotionPro/assets/images/large.jpg",

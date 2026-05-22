@@ -656,7 +656,18 @@ module.exports = class LinknLink extends SimpleClass
 		}
 
 		// Map entity to capability and update value
-		device.processMQTTMessage(ent, normalized, payloadStr, json);
+		Promise.resolve(device.processMQTTMessage(ent, normalized, payloadStr, json))
+			.then((handled) =>
+			{
+				if (handled === false)
+				{
+					this.app.updateLog(`No capability mapping for device "${device.getName()}" (${device.driver.id}) entity "${ent.name}" component "${ent.component}"`, 0);
+				}
+			})
+			.catch((err) =>
+			{
+				this.app.updateLog(`processMQTTMessage error for "${device.getName()}" entity "${ent.name}": ${this.app.varToString(err)}`, 0);
+			});
 	}
 
 	flushPendingMessagesForDevice(deviceId)

@@ -51,9 +51,25 @@
 	<!-- Settings-->
 	<div id="settings" class="tabcontent">
 		<fieldset class="homey-form-fieldset">
-			<p id="introText" data-i18n="settings.intro"></p>
-			<p id="response"></p>
-			<fieldset class="homey-form-fieldset">
+			<div id="setupGuideLauncher">
+				<p id="introText" data-i18n="settings.intro"></p>
+				<div class="field row">
+					<button class="homey-button-small" id="openSetupGuide" title="Open Setup Guide"
+						aria-label="Open Setup Guide">Open Setup Guide</button>
+				</div>
+			</div>
+			<div id="setupGuidePanel" class="setup-guide-inline" aria-hidden="true">
+				<div class="setup-guide-inline-header">
+					<h2>Setup Guide</h2>
+					<button class="homey-button-small" id="closeSetupGuide" title="Close Setup Guide"
+						aria-label="Close Setup Guide">Close</button>
+				</div>
+				<iframe id="setupGuideFrame" class="setup-guide-inline-frame" src="setup_guide.html"
+					title="LinknLink Setup Guide"></iframe>
+			</div>
+			<div id="settingsContentPanel" class="settings-content-panel">
+				<p id="response"></p>
+				<fieldset class="homey-form-fieldset">
 				<legend class="homey-form-legend" data-i18n="settings.logintitle"></legend>
 				<span id="response"></span>
 				<label class="homey-form-checkbox">
@@ -127,7 +143,9 @@
 					<button class="homey-button-primary-full" id="saveButton" data-i18n="settings.save" title="Save Settings"
 						aria-label="Save Settings"></button>
 				</div>
+				</fieldset>
 			</fieldset>
+			</div>
 	</div>
 
 	<!-- detected-->
@@ -219,6 +237,11 @@
 		var sendDeviceLogElement = document.getElementById('sendDeviceLog');
 		var emailElement = document.getElementById('email');
 		var descriptionElement = document.getElementById('description');
+		var openSetupGuideElement = document.getElementById('openSetupGuide');
+		var setupGuideLauncherElement = document.getElementById('setupGuideLauncher');
+		var setupGuidePanelElement = document.getElementById('setupGuidePanel');
+		var settingsPageElement = document.getElementById('settings');
+		var closeSetupGuideElement = document.getElementById('closeSetupGuide');
 
 		// a method named 'onHomeyReady' must be present in your code
 		function onHomeyReady(Homey)
@@ -336,6 +359,27 @@
 				{
 					passwordEl.type = "password";
 				}
+			});
+
+			openSetupGuideElement.addEventListener('click', function ()
+			{
+				document.documentElement.classList.add('setup-guide-open');
+				document.body.classList.add('setup-guide-open');
+				settingsPageElement.classList.add('setup-guide-open');
+				setupGuideLauncherElement.classList.add('setup-guide-launcher-hidden');
+				setupGuidePanelElement.classList.add('show');
+				setupGuidePanelElement.setAttribute('aria-hidden', 'false');
+				setupGuidePanelElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			});
+
+			closeSetupGuideElement.addEventListener('click', function ()
+			{
+				document.documentElement.classList.remove('setup-guide-open');
+				document.body.classList.remove('setup-guide-open');
+				settingsPageElement.classList.remove('setup-guide-open');
+				setupGuideLauncherElement.classList.remove('setup-guide-launcher-hidden');
+				setupGuidePanelElement.classList.remove('show');
+				setupGuidePanelElement.setAttribute('aria-hidden', 'true');
 			});
 
 			saveButton.addEventListener('click', function ()
