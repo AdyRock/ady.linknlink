@@ -18,12 +18,9 @@ module.exports = class eMotionDriver extends LinknLinkDriver
 	{
 		const model = `${device?.model || ''}`;
 		const modelLower = model.toLowerCase();
-		if (!modelLower.includes('emotion'))
-		{
-			return false;
-		}
 
-		if (/emotion\s*(pro|ultra|ultra2|max)/i.test(model))
+		// Keep explicit Pro/Ultra/Max variants on their dedicated drivers.
+		if (/(pro|ultra|ultra2|max)/i.test(model))
 		{
 			return false;
 		}
@@ -33,12 +30,19 @@ module.exports = class eMotionDriver extends LinknLinkDriver
 			.map((entityKey) => this.homey.app.linknLinkAPI.entities.get(entityKey)?.name)
 			.filter(Boolean);
 
-		const supportedTraitNames = ['all_area', 'Any Presence', 'temperature', 'humidity', 'brightness'];
-		const matched = entityNames.some((entityName) => supportedTraitNames.includes(entityName));
+		const hasOGPresenceTrait = entityNames.includes('all_area');
+		const hasProUltraPresenceTraits = entityNames.includes('Any Presence') || entityNames.includes('Zone 1 Presence');
+
+		const isModelCandidate = modelLower.includes('emotion') || modelLower.includes('presence sensor');
+		const matched = isModelCandidate && hasOGPresenceTrait && !hasProUltraPresenceTraits;
 
 		if (matched)
 		{
 			this.homey.app.updateLog(`eMotionDriver matched model "${model}" using traits: ${entityNames.join(', ')}`, 0);
+		}
+		else
+		{
+			this.homey.app.updateLog(`eMotionDriver rejected model "${model}" using traits: ${entityNames.join(', ')}`, 1);
 		}
 
 		return matched;

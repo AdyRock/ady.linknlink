@@ -28,5 +28,8 @@
 	},
 	"1.0.7": {
 		"en": "Added a Guide section to the settings page with troubleshooting tips and instructions on how to get the most useful information in logs when asking for help with setup issues."
+	},
+	"1.0.8": {
+		"en": "Updated device detection for eMotion devices."
 	}
 }
