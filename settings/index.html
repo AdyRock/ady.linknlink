@@ -390,6 +390,7 @@
 					}
 					response.style.color = 'green';
 					response.innerHTML = __('settings.login_success');
+					Homey.alert(__('settings.mqttSetupReminder'));
 
 					setTimeout(function ()
 					{

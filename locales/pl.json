@@ -35,6 +35,7 @@
 		"brokerWSPort": "Port WebSocket brokera",
 		"useHomeyBroker": "Użyj wbudowanego brokera MQTT aplikacji",
 		"broker_warning_port_in_use": "Wbudowany broker MQTT nie mógł się uruchomić, ponieważ port brokera jest już zajęty:",
-		"broker_warning_wsport_in_use": "Wbudowany nasłuch MQTT WebSocket nie mógł się uruchomić, ponieważ port WebSocket jest już zajęty:"
+		"broker_warning_wsport_in_use": "Wbudowany nasłuch MQTT WebSocket nie mógł się uruchomić, ponieważ port WebSocket jest już zajęty:",
+		"mqttSetupReminder": "Upewnij się, że dodasz urządzenie w aplikacji mobilnej LinknLink i skonfigurujesz usługę MQTT urządzenia z tymi samymi danymi co w tej aplikacji."
 	}
 }

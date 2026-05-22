@@ -22,5 +22,8 @@
 	},
 	"1.0.5": {
 		"en": "Fixed localhost setting in MQTT broker configuration so it doesn't need the mqtt:// prefix. Fixed closedown of internal broker when changing settings so it can restart correctly."
+	},
+	"1.0.6": {
+		"en": "Fixed crash when trying to start internal MQTT broker if the configured port is already in use. Added error handling and logging for this case, and added a warning message in the settings UI to explain the issue."
 	}
 }

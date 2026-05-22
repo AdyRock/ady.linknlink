@@ -35,6 +35,7 @@
 		"brokerWSPort": "Broker-WebSocket-port",
 		"useHomeyBroker": "Brug appens indbyggede MQTT-broker",
 		"broker_warning_port_in_use": "Den indbyggede MQTT-broker kunne ikke starte, fordi broker-porten allerede er i brug:",
-		"broker_warning_wsport_in_use": "Den indbyggede MQTT-WebSocket-lytter kunne ikke starte, fordi WebSocket-porten allerede er i brug:"
+		"broker_warning_wsport_in_use": "Den indbyggede MQTT-WebSocket-lytter kunne ikke starte, fordi WebSocket-porten allerede er i brug:",
+		"mqttSetupReminder": "Sørg for at tilføje enheden i LinknLink-mobilappen og konfigurere enhedens MQTT-tjeneste med de samme oplysninger som i denne app."
 	}
 }

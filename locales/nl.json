@@ -35,6 +35,7 @@
 		"brokerWSPort": "Broker-WebSocketpoort",
 		"useHomeyBroker": "Ingebouwde MQTT-broker van de app gebruiken",
 		"broker_warning_port_in_use": "De ingebouwde MQTT-broker kon niet starten omdat de brokerpoort al in gebruik is:",
-		"broker_warning_wsport_in_use": "De ingebouwde MQTT-WebSocket-listener kon niet starten omdat de WebSocketpoort al in gebruik is:"
+		"broker_warning_wsport_in_use": "De ingebouwde MQTT-WebSocket-listener kon niet starten omdat de WebSocketpoort al in gebruik is:",
+		"mqttSetupReminder": "Zorg ervoor dat je het apparaat toevoegt in de LinknLink mobiele app en de MQTT-service van het apparaat configureert met dezelfde gegevens als in deze app."
 	}
 }
