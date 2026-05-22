@@ -1,7 +1,10 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LinknLink Settings</title>
 	<link rel="stylesheet" type="text/css" href="lwsa.css">
 	<link rel="stylesheet" type="text/css" href="busy_indicator.css" />
 	<link rel="stylesheet" type="text/css" href="extraStyles.css">
@@ -37,10 +40,12 @@
 
 	<!-- Tab links -->
 	<div class="tab">
-		<button class="tablinks" onclick="setPage(event, 'settings')" id="defaultOpen"><span
+		<button class="tablinks" onclick="setPage(event, 'settings')" id="defaultOpen" title="Settings"
+			aria-label="Settings"><span
 				data-i18n="settings.settings"></span></button>
-		<button class="tablinks" onclick="setPage(event, 'detected')">Detected</button>
-		<button class="tablinks" onclick="setPage(event, 'log')">Log</button>
+		<button class="tablinks" onclick="setPage(event, 'detected')" title="Detected"
+			aria-label="Detected">Detected</button>
+		<button class="tablinks" onclick="setPage(event, 'log')" title="Log" aria-label="Log">Log</button>
 	</div>
 
 	<!-- Settings-->
@@ -53,39 +58,74 @@
 				<span id="response"></span>
 				<label class="homey-form-checkbox">
 					<input class="homey-form-checkbox-input" id="useHomeyBroker" type="checkbox"
+						title="Use app's built-in MQTT broker" aria-label="Use app's built-in MQTT broker"
 						value="useHomeyBroker" />
 					<span class="homey-form-checkbox-checkmark"></span>
 					<span class="homey-form-checkbox-text"><span data-i18n="settings.useHomeyBroker"></span></span>
+					<div class="tooltip"><i class="fi fi-rr-info"></i>
+						<span class="tooltiptext" data-i18n="settings.useHomeyBrokerExplanation"></span>
+					</div>
 				</label>
+				<p id="brokerWarning" class="broker-warning"></p>
 				<div class="field row">
-					<label class="homey-form-label" for="brokerURL" data-i18n="settings.brokerURL"></label>
-					<input class="homey-form-input" id="brokerURL" type="text" value="" />
+					<label class="homey-form-label" for="brokerURL"><span data-i18n="settings.brokerURL"></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.brokerURLExplanation"></span>
+						</div>
+					</label>
+					<input class="homey-form-input" id="brokerURL" type="text" value="" title="Broker URL or IP Address"
+						aria-label="Broker URL or IP Address" />
 				</div>
 				<div class="field row">
-					<label class="homey-form-label" for="brokerPort" data-i18n="settings.brokerPort"></label>
-					<input class="homey-form-input" id="brokerPort" type="text" value="" />
+					<label class="homey-form-label" for="brokerPort"><span data-i18n="settings.brokerPort"></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.brokerPortExplanation"></span>
+						</div>
+					</label>
+					<input class="homey-form-input" id="brokerPort" type="text" value="" title="Broker Port"
+						aria-label="Broker Port" />
 				</div>
 				<div class="field row">
-					<label class="homey-form-label" for="brokerWSPort" data-i18n="settings.brokerWSPort"></label>
-					<input class="homey-form-input" id="brokerWSPort" type="text" value="" />
+					<label class="homey-form-label" for="brokerWSPort"><span data-i18n="settings.brokerWSPort"></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.brokerWSPortExplanation"></span>
+						</div>
+					</label>
+					<input class="homey-form-input" id="brokerWSPort" type="text" value="" title="Broker WebSocket Port"
+						aria-label="Broker WebSocket Port" />
 				</div>
 				<div class="field row">
-					<label class="homey-form-label" for="username" data-i18n="settings.username"></label>
-					<input class="homey-form-input" id="username" type="text" value="" />
+					<label class="homey-form-label" for="username"><span data-i18n="settings.username"></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.usernameExplanation"></span>
+						</div>
+					</label>
+					<input class="homey-form-input" id="username" type="text" value="" title="Username"
+						aria-label="Username" />
 				</div>
 				<div class="field row">
-					<label class="homey-form-label" for="password" data-i18n="settings.password"></label>
-					<input class="homey-form-input" id="password" type="password" value="" />
+					<label class="homey-form-label" for="password"><span data-i18n="settings.password"></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.passwordExplanation"></span>
+						</div>
+					</label>
+					<input class="homey-form-input" id="password" type="password" value="" title="Password"
+						aria-label="Password" />
 					<label class="homey-form-checkbox">
 						<input class="homey-form-checkbox-input" id="showPassword" type="checkbox"
+							title="Show Password" aria-label="Show Password"
 							value="showPassword" />
 						<span class="homey-form-checkbox-checkmark"></span>
 						<span class="homey-form-checkbox-text"><span data-i18n="settings.show_password"></span></span>
+						<div class="tooltip"><i class="fi fi-rr-info"></i>
+							<span class="tooltiptext" data-i18n="settings.showPasswordExplanation"></span>
+						</div>
 					</label>
 					<p></p>
 				</div>
 				<div class="field row">
-					<button class="homey-button-primary-full" id="saveButton" data-i18n="settings.save"></button>
+					<button class="homey-button-primary-full" id="saveButton" data-i18n="settings.save" title="Save Settings"
+						aria-label="Save Settings"></button>
 				</div>
 			</fieldset>
 	</div>
@@ -94,12 +134,16 @@
 	<div id="detected" class="tabcontent">
 		<fieldset>
 			<p>
-				<button id="getDeviceLog" class="homey-button-small" data-i18n="settings.getDevices"></button>
-				<button id="clearDeviceLog" class="homey-button-small" data-i18n="settings.clear"></button>
-				<button id="sendDeviceLog" class="homey-button-small" data-i18n="settings.send"></button>
+				<button id="getDeviceLog" class="homey-button-small" data-i18n="settings.getDevices" title="Get Devices"
+					aria-label="Get Devices"></button>
+				<button id="clearDeviceLog" class="homey-button-small" data-i18n="settings.clear" title="Clear"
+					aria-label="Clear"></button>
+				<button id="sendDeviceLog" class="homey-button-small" data-i18n="settings.send" title="Send"
+					aria-label="Send"></button>
 			</p>
 			<div class="field row">
-				<textarea id="detectedDevices" class="homey-form-textarea" wrap="off"></textarea>
+				<textarea id="detectedDevices" class="homey-form-textarea" wrap="off" title="Detected devices log"
+					aria-label="Detected devices log"></textarea>
 			</div>
 		</fieldset>
 	</div>
@@ -108,7 +152,8 @@
 	<div id="log" class="tabcontent">
 		<fieldset class="homey-form-fieldset">
 			<label class="homey-form-checkbox">
-				<input class="homey-form-checkbox-input" id="enableLog" type="checkbox" value="auto" />
+				<input class="homey-form-checkbox-input" id="enableLog" type="checkbox" value="auto" title="Log Enabled"
+					aria-label="Log Enabled" />
 				<span class="homey-form-checkbox-checkmark"></span>
 				<span class="homey-form-checkbox-text"><span data-i18n="settings.enableLog"></span></span>
 				<div class="tooltip"><i class="fi fi-rr-info"></i>
@@ -121,21 +166,26 @@
 						<span class="tooltiptext" data-i18n="settings.emailExplanation"></span>
 					</div>
 				</label>
-				<input class="homey-form-input" id="email" type="text" value />
+				<input class="homey-form-input" id="email" type="text" value title="Email Address or Forum id"
+					aria-label="Email Address or Forum id" />
 				<label class="homey-form-label" for="description"><span data-i18n="settings.description"></span>
 					<div class="tooltip"><i class="fi fi-rr-info"></i>
 						<span class="tooltiptext" data-i18n="settings.descriptionExplanation"></span>
 					</div>
 				</label>
-				<input class="homey-form-input" id="description" type="text" value />
+				<input class="homey-form-input" id="description" type="text" value title="Description"
+					aria-label="Description" />
 				<p></p>
 			</div>
 			<p>
-				<button id="clearInfoLog" class="homey-button-small" data-i18n="settings.clear"></button>
-				<button id="sendInfoLog" class="homey-button-small" data-i18n="settings.send"></button>
+				<button id="clearInfoLog" class="homey-button-small" data-i18n="settings.clear" title="Clear"
+					aria-label="Clear"></button>
+				<button id="sendInfoLog" class="homey-button-small" data-i18n="settings.send" title="Send"
+					aria-label="Send"></button>
 			</p>
 			<div class="field row">
-				<textarea id="infoLog" class="homey-form-textarea" wrap="off"></textarea>
+				<textarea id="infoLog" class="homey-form-textarea" wrap="off" title="Diagnostics log"
+					aria-label="Diagnostics log"></textarea>
 			</div>
 		</fieldset>
 	</div>
@@ -155,6 +205,8 @@
 		var brokerPortEl = document.getElementById('brokerPort');
 		var brokerWSPortEl = document.getElementById('brokerWSPort');
 		var useHomeyBrokerEl = document.getElementById('useHomeyBroker');
+		var brokerWarningEl = document.getElementById('brokerWarning');
+		var brokerSettingsCache = {};
 
 		var detectedDevicesElement = document.getElementById('detectedDevices');
 		var infoLogElement = document.getElementById('infoLog');
@@ -171,6 +223,41 @@
 		// a method named 'onHomeyReady' must be present in your code
 		function onHomeyReady(Homey)
 		{
+			function renderLocalBrokerWarning()
+			{
+				if (!brokerWarningEl)
+				{
+					return;
+				}
+
+				if (!useHomeyBrokerEl.checked)
+				{
+					brokerWarningEl.style.display = 'none';
+					brokerWarningEl.textContent = '';
+					return;
+				}
+
+				const warningCode = brokerSettingsCache.localBrokerWarning;
+				const warningPort = brokerSettingsCache.localBrokerWarningPort;
+
+				if (warningCode === 'tcp_port_in_use')
+				{
+					brokerWarningEl.style.display = 'block';
+					brokerWarningEl.textContent = `${Homey.__('settings.broker_warning_port_in_use')} ${warningPort || ''}`.trim();
+					return;
+				}
+
+				if (warningCode === 'ws_port_in_use')
+				{
+					brokerWarningEl.style.display = 'block';
+					brokerWarningEl.textContent = `${Homey.__('settings.broker_warning_wsport_in_use')} ${warningPort || ''}`.trim();
+					return;
+				}
+
+				brokerWarningEl.style.display = 'none';
+				brokerWarningEl.textContent = '';
+			}
+
 			// Tell Homey we're ready to be displayed
 			Homey.ready();
 
@@ -205,6 +292,7 @@
 			Homey.get('brokerSettings', function (err, brokerSettings)
 			{
 				if (err) return Homey.alert(err);
+				brokerSettingsCache = brokerSettings || {};
 				useHomeyBrokerEl.checked = brokerSettings.useHomeyBroker;
 				brokerURLEl.value = brokerSettings.url;
 				brokerPortEl.value = brokerSettings.port;
@@ -214,12 +302,14 @@
 
 				// Apply disable state based on useHomeyBroker setting
 				brokerURLEl.disabled = useHomeyBrokerEl.checked;
+				renderLocalBrokerWarning();
 			});
 
 			useHomeyBrokerEl.addEventListener('click', function (e)
 			{
 				// Disable/enable the broker URL fields
 				brokerURLEl.disabled = useHomeyBrokerEl.checked;
+				renderLocalBrokerWarning();
 
 				// Fill in the HOMEY broker details if selected
 				if (useHomeyBrokerEl.checked)
@@ -300,6 +390,20 @@
 					}
 					response.style.color = 'green';
 					response.innerHTML = __('settings.login_success');
+
+					setTimeout(function ()
+					{
+						Homey.get('brokerSettings', function (getErr, latestBrokerSettings)
+						{
+							if (getErr)
+							{
+								return;
+							}
+
+							brokerSettingsCache = latestBrokerSettings || {};
+							renderLocalBrokerWarning();
+						});
+					}, 1000);
 				});
 			});
 

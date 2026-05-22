@@ -133,14 +133,42 @@ module.exports = class LinknLink extends SimpleClass
 		this.pendingMessages = new Map();
 	}
 
+	setLocalBrokerWarning(code = null, port = null)
+	{
+		const nextCode = code || null;
+		const nextPort = port ? `${port}` : null;
+
+		if (this.broker.localBrokerWarning === nextCode && this.broker.localBrokerWarningPort === nextPort)
+		{
+			return;
+		}
+
+		this.broker.localBrokerWarning = nextCode;
+		this.broker.localBrokerWarningPort = nextPort;
+		this.app.homey.settings.set('brokerSettings', this.broker);
+	}
+
 	setupHomeyMQTTServer()
 	{
 		if (!this.broker.useHomeyBroker)
 		{
+			this.setLocalBrokerWarning();
 			// Start the MQTT client
 			this.setupMQTTClient(this.broker, this.app.homeyID);
 			return;
 		}
+
+		let mqttClientStarted = false;
+		const startMQTTClientOnce = () =>
+		{
+			if (mqttClientStarted)
+			{
+				return;
+			}
+
+			mqttClientStarted = true;
+			this.setupMQTTClient(this.broker, this.app.homeyID);
+		};
 
 		// Setup the local MQTT server
 		aedes.authenticate = function aedesAuthenticate(client, username, password, callback)
@@ -158,15 +186,37 @@ module.exports = class LinknLink extends SimpleClass
 		}.bind(this);
 
 		this.server = net.createServer(aedes.handle);
+		this.server.on('error', (err) =>
+		{
+			if (err.code === 'ERR_SERVER_ALREADY_LISTEN')
+			{
+				this.app.updateLog(`server already listening on port ${this.broker.port}`);
+				startMQTTClientOnce();
+				return;
+			}
+
+			if (err.code === 'EADDRINUSE')
+			{
+				this.setLocalBrokerWarning('tcp_port_in_use', this.broker.port);
+				this.app.updateLog(`server address in use on port ${this.broker.port}; using external broker/client mode`, 0);
+				startMQTTClientOnce();
+				return;
+			}
+
+			this.app.updateLog(`server error: ${this.app.varToString(err)}`, 0);
+			startMQTTClientOnce();
+		});
+
 		try
 		{
 			this.server.listen(this.broker.port, () =>
 			{
 				this.app.updateLog(`server started and listening on port ${this.broker.port}`);
 				this.mqttServerReady = true;
+				this.setLocalBrokerWarning();
 
 				// Start the MQTT client
-				this.setupMQTTClient(this.broker, this.app.homeyID);
+				startMQTTClientOnce();
 			});
 		}
 		catch (err)
@@ -176,26 +226,45 @@ module.exports = class LinknLink extends SimpleClass
 				this.app.updateLog(`server already listening on port ${this.broker.port}`);
 
 				// Start the MQTT client
-				this.setupMQTTClient(this.broker, this.app.homeyID);
+				startMQTTClientOnce();
 			}
 			else if (err.code === 'EADDRINUSE')
 			{
-				this.app.updateLog(`server address in use on port ${this.broker.port}`);
+				this.setLocalBrokerWarning('tcp_port_in_use', this.broker.port);
+				this.app.updateLog(`server address in use on port ${this.broker.port}; using external broker/client mode`, 0);
 
 				// Start the MQTT client
-				this.setupMQTTClient(this.broker, this.app.homeyID);
+				startMQTTClientOnce();
+			}
+			else
+			{
+				this.app.updateLog(`server listen threw: ${this.app.varToString(err)}`, 0);
+				startMQTTClientOnce();
 			}
 		}
-
-		this.server.on('error', (err) =>
-		{
-			this.app.updateLog(`server error: ${this.app.varToString(err)}`, 0);
-		});
 
 		if (!this.httpServer)
 		{
 			this.httpServer = http.createServer();
 		}
+
+		this.httpServer.on('error', (err) =>
+		{
+			if (err.code === 'ERR_SERVER_ALREADY_LISTEN')
+			{
+				this.app.updateLog(`websocket server already listening on port ${this.broker.wsport}`);
+				return;
+			}
+
+			if (err.code === 'EADDRINUSE')
+			{
+				this.setLocalBrokerWarning('ws_port_in_use', this.broker.wsport);
+				this.app.updateLog(`websocket server address in use on port ${this.broker.wsport}; continuing without local websocket listener`, 0);
+				return;
+			}
+
+			this.app.updateLog(`websocket http server error: ${this.app.varToString(err)}`, 0);
+		});
 
 		// Create a websocket server for the MQTT server
 		this.wsServer = ws.createServer({ server: this.httpServer }, aedes.handle);
@@ -211,11 +280,16 @@ module.exports = class LinknLink extends SimpleClass
 		{
 			if (err.code === 'ERR_SERVER_ALREADY_LISTEN')
 			{
-				this.app.updateLog(`server already listening on port ${this.broker.wsport}`);
+				this.app.updateLog(`websocket server already listening on port ${this.broker.wsport}`);
 			}
 			else if (err.code === 'EADDRINUSE')
 			{
-				this.app.updateLog(`server address in use on port ${this.broker.wsport}`);
+				this.setLocalBrokerWarning('ws_port_in_use', this.broker.wsport);
+				this.app.updateLog(`websocket server address in use on port ${this.broker.wsport}; continuing without local websocket listener`, 0);
+			}
+			else
+			{
+				this.app.updateLog(`websocket server listen threw: ${this.app.varToString(err)}`, 0);
 			}
 		}
 
@@ -689,6 +763,7 @@ module.exports = class LinknLink extends SimpleClass
 		}
 		else
 		{
+			this.setLocalBrokerWarning();
 			this.setupMQTTClient(this.broker, this.app.homeyID);
 		}
 

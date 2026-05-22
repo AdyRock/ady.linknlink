@@ -16,85 +16,101 @@
   https://github.com/lego12239/busy_indicator.js
 */
 
-"use strict";
+'use strict';
 
-function busy_indicator(cntr_el, img_el, show_cb, hide_cb)
+function BusyIndicator(containerEl, imageEl, showCb, hideCb)
 {
-	this.el = {};
-	this.cb = {show: null, hide: null};
-	this.pos = {x: 0, y: 0};
-	this.show_class = "show";
+	this.elements = {
+		container: null,
+		image: imageEl,
+	};
 
+	this.callbacks = {
+		show: showCb,
+		hide: hideCb,
+	};
 
-	this._set_prm.call(this.el, "cntr", cntr_el);
-	this.el.img = img_el;
-	if (show_cb != undefined)
-		this.cb.show = show_cb;
-	if (hide_cb != undefined)
-		this.cb.hide = hide_cb;
+	this.position = {
+		x: 0,
+		y: 0,
+	};
 
-	this.cnt = 0;
+	this.showClass = 'show';
+	this.counter = 0;
+
+	this._setRequiredElement('container', containerEl);
 }
 
-busy_indicator.prototype._set_prm = function (n, v)
+BusyIndicator.prototype._setRequiredElement = function setRequiredElement(name, value)
 {
-	if (( v == undefined ) || ( v == null ))
-		throw("busy_indicator: " + n + " is not supplied");
-	this[n] = v;
-}
+	if (value === undefined || value === null)
+	{
+		throw new Error(`busy_indicator: ${name} is not supplied`);
+	}
 
-busy_indicator.prototype.show = function ()
+	this.elements[name] = value;
+};
+
+BusyIndicator.prototype.show = function show()
 {
-	var top, left;
-	var img_el;
-
-
-	this.cnt++;
-	if ( this.cnt > 1 )
+	this.counter += 1;
+	if (this.counter > 1)
+	{
 		return;
+	}
 
-	this.el.cntr.classList.add(this.show_class);
-
+	this.elements.container.classList.add(this.showClass);
 	this.align();
-	
-	if (this.cb.show != undefined)
-		this.cb.show();
-}
 
-busy_indicator.prototype.align = function ()
+	if (this.callbacks.show)
+	{
+		this.callbacks.show();
+	}
+};
+
+BusyIndicator.prototype.align = function align()
 {
-	if (this.el.img == null)
+	if (!this.elements.image)
+	{
 		return;
-	
-	this.pos = this.calc_pos();
+	}
 
-	this.el.img.style.top = this.pos.y + "px";
-	this.el.img.style.left = this.pos.x + "px";
-}
+	this.position = this.calcPos();
 
-busy_indicator.prototype.calc_pos = function ()
+	this.elements.image.style.top = `${this.position.y}px`;
+	this.elements.image.style.left = `${this.position.x}px`;
+};
+
+BusyIndicator.prototype.calcPos = function calcPos()
 {
-	var x, y;
+	const x = (this.elements.container.clientWidth / 2) - (this.elements.image.offsetWidth / 2);
+	const y = (this.elements.container.clientHeight / 2) - (this.elements.image.offsetHeight / 2);
 
+	return { x, y };
+};
 
-	x = this.el.cntr.clientWidth/2 - this.el.img.offsetWidth/2;
-	y = this.el.cntr.clientHeight/2 - this.el.img.offsetHeight/2;
-	
-	return {x: x, y: y};
-}
-
-busy_indicator.prototype.hide = function ()
+BusyIndicator.prototype.hide = function hide()
 {
-	if ( this.cnt > 0 )
-		this.cnt--;
-	else
+	if (this.counter <= 0)
+	{
 		return;
+	}
 
-	if ( this.cnt )
+	this.counter -= 1;
+	if (this.counter)
+	{
 		return;
+	}
 
-	this.el.cntr.classList.remove(this.show_class);
+	this.elements.container.classList.remove(this.showClass);
 
-	if (this.cb.hide != undefined)
-		this.cb.hide();
+	if (this.callbacks.hide)
+	{
+		this.callbacks.hide();
+	}
+};
+
+if (typeof globalThis !== 'undefined')
+{
+	globalThis['busy_indicator'] = BusyIndicator;
 }

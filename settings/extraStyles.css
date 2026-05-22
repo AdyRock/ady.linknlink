@@ -76,6 +76,7 @@
 }
 
 details {
+	-webkit-user-select: none;
     user-select: none;
 }
 
@@ -109,4 +110,9 @@ summary::-webkit-details-marker {
     /* Adjust the z-index if necessary to ensure it appears above other elements */
     border-bottom: 1px solid lightgray;
     /* Add a border for separation */
+}
+
+.broker-warning {
+    display: none;
+    color: #b45f00;
 }

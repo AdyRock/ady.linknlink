@@ -3,6 +3,10 @@
 	"version": "1.0.5",
 	"main": "app.js",
 	"author": "Adrian Rockall",
+	"scripts": {
+		"lint": "eslint app.js api.js linknlinkapi.js drivers settings --format compact",
+		"lint:all": "eslint ."
+	},
 	"dependencies": {
 		"node-fetch": "^2.7.0",
 		"lodash": "^4.17.21",
