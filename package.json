@@ -1,6 +1,6 @@
 {
 	"name": "ady.linknlink",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"main": "app.js",
 	"author": "Adrian Rockall",
 	"scripts": {

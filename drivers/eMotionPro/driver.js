@@ -9,7 +9,8 @@ module.exports = class eMotionProDriver extends LinknLinkDriver
 	 */
 	async onInit()
 	{
-		this.deviceType = 'eMotion Pro';
+		// eMotion Max 3 uses the same capability profile as eMotion Pro.
+		this.deviceType = ['eMotion Pro', 'eMotion Max 3'];
 		this.homey.app.updateLog('eMotionProDriver has been initialized');
 	}
 
