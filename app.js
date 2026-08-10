@@ -364,11 +364,27 @@ module.exports = class LinknLink extends Homey.App
 
 	getDeviceList(body)
 	{
-		const deviceList = this.linknLinkAPI.getDeviceList();
+		const rawAvailableOnly = body ? body.availableOnly : undefined;
+		let availableOnly = true;
 
-		// deviceList is a Map, convert to string
-		const deviceText = this.varToString(deviceList);
-		return deviceText;
+		if (rawAvailableOnly !== undefined && rawAvailableOnly !== null)
+		{
+			if (typeof rawAvailableOnly === 'string')
+			{
+				const normalized = rawAvailableOnly.trim().toLowerCase();
+				availableOnly = !['false', '0', 'no', 'off'].includes(normalized);
+			}
+			else if (typeof rawAvailableOnly === 'number')
+			{
+				availableOnly = rawAvailableOnly !== 0;
+			}
+			else
+			{
+				availableOnly = Boolean(rawAvailableOnly);
+			}
+		}
+
+		return this.linknLinkAPI.getDetectedDeviceSummary({ availableOnly });
 	}
 
 	changeBroker(body)

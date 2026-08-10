@@ -3,9 +3,10 @@
 module.exports = {
 
 	// Retrieve all devices with their information
-	async getDeviceLog({ homey, body })
+	async getDeviceLog({ homey, body, query })
 	{
-		return homey.app.getDeviceList(body);
+		const params = { ...(body || {}), ...(query || {}) };
+		return homey.app.getDeviceList(params);
 	},
 
 	// Log lines

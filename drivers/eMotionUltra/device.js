@@ -2,6 +2,23 @@
 
 const Homey = require('homey');
 
+const CAPABILITY_AVAILABILITY_MAP = {
+	alarm_presence: ['Any Presence'],
+	measure_people_count: ['All Target Counts', 'Persons in Fenced Zones'],
+	'alarm_presence.zone1': ['Zone 1 Presence'],
+	'measure_people_count.zone1': ['Zone 1 Target Counts'],
+	'alarm_presence.zone2': ['Zone 2 Presence'],
+	'measure_people_count.zone2': ['Zone 2 Target Counts'],
+	'alarm_presence.zone3': ['Zone 3 Presence'],
+	'measure_people_count.zone3': ['Zone 3 Target Counts'],
+	'alarm_presence.zone4': ['Zone 4 Presence'],
+	'measure_people_count.zone4': ['Zone 4 Target Counts'],
+	measure_temperature: ['temperature'],
+	measure_humidity: ['humidity'],
+	measure_luminance: ['brightness'],
+	measure_signal_strength: ['wifi rssi'],
+};
+
 module.exports = class eMotionUltraDevice extends Homey.Device
 {
 
@@ -74,7 +91,7 @@ module.exports = class eMotionUltraDevice extends Homey.Device
 			return true;
 		}
 
-		if (mqttMessage.name === 'All Target Counts')
+		if (mqttMessage.name === 'All Target Counts' || mqttMessage.name === 'Persons in Fenced Zones')
 		{
 			value = parseInt(value, 10);
 			if (this.getCapabilityValue('measure_people_count') !== value)
@@ -221,5 +238,67 @@ module.exports = class eMotionUltraDevice extends Homey.Device
 			return true;
 		}
 		return false;
+	}
+
+	async processEntityAvailability(mqttMessage)
+	{
+		if (!mqttMessage || mqttMessage.deviceId !== this.getData().id)
+		{
+			return false;
+		}
+
+		for (const [capability, entityNames] of Object.entries(CAPABILITY_AVAILABILITY_MAP))
+		{
+			if (!entityNames.includes(mqttMessage.name))
+			{
+				continue;
+			}
+
+			const nextVisible = this.getAggregatedAvailability(entityNames);
+			if (nextVisible === null)
+			{
+				continue;
+			}
+
+			await this.syncCapabilityVisibility(capability, nextVisible);
+		}
+
+		return true;
+	}
+
+	getAggregatedAvailability(entityNames)
+	{
+		const deviceId = this.getData().id;
+		const entities = Array.from(this.homey.app.linknLinkAPI.entities.values())
+			.filter((entity) => entity.deviceId === deviceId && entityNames.includes(entity.name));
+
+		const knownStates = entities
+			.map((entity) => entity.isAvailable)
+			.filter((state) => typeof state === 'boolean');
+
+		if (knownStates.length === 0)
+		{
+			return null;
+		}
+
+		return knownStates.some((state) => state === true);
+	}
+
+	async syncCapabilityVisibility(capability, shouldBeVisible)
+	{
+		const hasCapability = this.hasCapability(capability);
+
+		if (shouldBeVisible && !hasCapability)
+		{
+			await this.addCapability(capability);
+			this.homey.app.updateLog(`Added capability ${capability} on ${this.getName()} based on entity availability`, 1);
+			return;
+		}
+
+		if (!shouldBeVisible && hasCapability)
+		{
+			await this.removeCapability(capability);
+			this.homey.app.updateLog(`Removed capability ${capability} on ${this.getName()} based on entity availability`, 1);
+		}
 	}
 };

@@ -159,6 +159,12 @@
 				<button id="sendDeviceLog" class="homey-button-small" data-i18n="settings.send" title="Send"
 					aria-label="Send"></button>
 			</p>
+			<label class="homey-form-checkbox">
+				<input class="homey-form-checkbox-input" id="availableOnly" type="checkbox" title="Show only available components"
+					aria-label="Show only available components" checked />
+				<span class="homey-form-checkbox-checkmark"></span>
+				<span class="homey-form-checkbox-text">Show only available components</span>
+			</label>
 			<div class="field row">
 				<textarea id="detectedDevices" class="homey-form-textarea" wrap="off" title="Detected devices log"
 					aria-label="Detected devices log"></textarea>
@@ -235,6 +241,7 @@
 		var getDeviceLogElement = document.getElementById('getDeviceLog');
 		var clearDeviceLogElement = document.getElementById('clearDeviceLog');
 		var sendDeviceLogElement = document.getElementById('sendDeviceLog');
+		var availableOnlyElement = document.getElementById('availableOnly');
 		var emailElement = document.getElementById('email');
 		var descriptionElement = document.getElementById('description');
 		var openSetupGuideElement = document.getElementById('openSetupGuide');
@@ -460,10 +467,11 @@
 				});
 			});
 
-			getDeviceLogElement.addEventListener('click', function (e)
+			function refreshDetectedDevices()
 			{
 				waitCursor(true);
-				Homey.api('GET', '/getDeviceLog/',
+				const availableOnly = availableOnlyElement.checked ? 'true' : 'false';
+				Homey.api('GET', `/getDeviceLog?availableOnly=${availableOnly}`,
 					{
 						hubDevices: true
 					}, function (err, result)
@@ -478,6 +486,16 @@
 					}
 					waitCursor(false);
 				});
+			}
+
+			getDeviceLogElement.addEventListener('click', function (e)
+			{
+				refreshDetectedDevices();
+			});
+
+			availableOnlyElement.addEventListener('change', function (e)
+			{
+				refreshDetectedDevices();
 			});
 
 			clearDeviceLogElement.addEventListener('click', function (e)

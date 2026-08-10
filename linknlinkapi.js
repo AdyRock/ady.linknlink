@@ -489,15 +489,35 @@ module.exports = class LinknLink extends SimpleClass
 			return;
 		}
 
+		const parsed = this.parseDiscoveryTopic(topic);
+		if (!parsed) return;
+
 		// Check if this config is of interest by looking to see if the name is in the desired array
 		if (!desiredComponents.includes(config.name))
 		{
-			this.app.updateLog(`Ignoring component ${config.name}`, 0);
+			this.app.updateLog(`Ignoring component ${config.name}`, 1);
+			this.app.updateLog(`Ignored discovery details: ${this.app.varToString({
+				topic,
+				component: parsed.component,
+				nodeId: parsed.nodeId,
+				objectId: parsed.objectId,
+				name: config.name,
+				uniqueId: config.unique_id,
+				device: {
+					name: config?.device?.name,
+					model: config?.device?.model,
+					manufacturer: config?.device?.manufacturer,
+					identifiers: config?.device?.identifiers,
+				},
+				stateTopic: config.state_topic,
+				availabilityTopic: config.availability_topic,
+				commandTopic: config.command_topic,
+				valueTemplate: config.value_template,
+				payloadOn: config.payload_on,
+				payloadOff: config.payload_off,
+			})}`, 1);
 			return;
 		}
-
-		const parsed = this.parseDiscoveryTopic(topic);
-		if (!parsed) return;
 
 		const { component, nodeId, objectId } = parsed;
 
@@ -522,7 +542,7 @@ module.exports = class LinknLink extends SimpleClass
 					manufacturer: config?.device?.manufacturer,
 					entities: new Set(),
 				});
-				this.app.updateLog(`Discovered device: ${JSON.stringify(this.devices.get(deviceId))}`, 0);
+				this.app.updateLog(`Discovered device: ${JSON.stringify(this.devices.get(deviceId))}`, 1);
 				// In a Homey app, this is where you'd create/register the physical device.
 			}
 			this.devices.get(deviceId).entities.add(entityKey);
@@ -544,6 +564,9 @@ module.exports = class LinknLink extends SimpleClass
 			payloadOn: config.payload_on,
 			payloadOff: config.payload_off,
 			unit: config.unit_of_measurement,
+			isAvailable: null,
+			availabilityRaw: null,
+			availabilityUpdatedAt: null,
 			rawConfig: config,
 		});
 
@@ -560,7 +583,7 @@ module.exports = class LinknLink extends SimpleClass
 			this.MQTTclient.subscribe(config.availability_topic);
 		}
 
-		this.app.updateLog(`Discovered entity: ${entityKey}, ${this.app.varToString(this.entities.get(entityKey))}`, 0);
+		this.app.updateLog(`Discovered entity: ${entityKey}, ${this.app.varToString(this.entities.get(entityKey))}`, 1);
 
 		// In a Homey app, this is where you'd create/register a capability mapping
 		// e.g. binary_sensor motion -> alarm_motion, sensor temperature -> measure_temperature.
@@ -596,16 +619,30 @@ module.exports = class LinknLink extends SimpleClass
 
 	handleEntityAvailability(entityKey, payloadStr)
 	{
-		// const ent = this.entities.get(entityKey);
-		// if (!ent) return;
+		const ent = this.entities.get(entityKey);
+		if (!ent) return;
 
-		// LinknLink often uses "online"/"offline" or 1/0 — depends on firmware.
-		// const v = payloadStr.replace(/"/g, '').toLowerCase();
-		// const isOnline = v === 'online' || v === '1' || v === 'true';
+		const previousAvailability = ent.isAvailable;
+		const isAvailable = this.normalizeAvailabilityPayload(payloadStr, ent.rawConfig || {});
 
-		//		this.app.updateLog(`[avail] ${entityKey} => ${isOnline ? 'online' : 'offline'}`);
+		ent.isAvailable = isAvailable;
+		ent.availabilityRaw = payloadStr;
+		ent.availabilityUpdatedAt = new Date().toISOString();
 
-		// Homey: you might call device.setAvailable()/setUnavailable() here.
+		if (previousAvailability !== isAvailable)
+		{
+			this.app.updateLog(`[avail] ${entityKey} => ${isAvailable ? 'online' : 'offline'}`);
+		}
+
+		const device = this.app.getDeviceByDid(ent.deviceId);
+		if (device && typeof device.processEntityAvailability === 'function')
+		{
+			Promise.resolve(device.processEntityAvailability(ent))
+				.catch((err) =>
+				{
+					this.app.updateLog(`processEntityAvailability error for "${device.getName()}" entity "${ent.name}": ${this.app.varToString(err)}`, 0);
+				});
+		}
 	}
 
 	handleEntityState(entityKey, payloadStr)
@@ -662,6 +699,18 @@ module.exports = class LinknLink extends SimpleClass
 				if (handled === false)
 				{
 					this.app.updateLog(`No capability mapping for device "${device.getName()}" (${device.driver.id}) entity "${ent.name}" component "${ent.component}"`, 0);
+					this.app.updateLog(`Unmapped entity runtime details: ${this.app.varToString({
+						deviceId: ent.deviceId,
+						entityKey: ent.entityKey,
+						component: ent.component,
+						name: ent.name,
+						stateTopic: ent.stateTopic,
+						availabilityTopic: ent.availabilityTopic,
+						payload: this.sanitizePayloadForLog(payloadStr),
+						normalized,
+						json,
+						rawConfig: ent.rawConfig,
+					})}`, 1);
 				}
 			})
 			.catch((err) =>
@@ -704,6 +753,41 @@ module.exports = class LinknLink extends SimpleClass
 			return Number(a) === Number(b);
 		}
 		return String(a) === String(b);
+	}
+
+	normalizeAvailabilityPayload(payloadStr, config)
+	{
+		const payloadAvailable = config.payload_available;
+		const payloadNotAvailable = config.payload_not_available;
+
+		if (payloadAvailable !== undefined && payloadNotAvailable !== undefined)
+		{
+			if (this.looselyEqual(payloadStr, payloadAvailable)) return true;
+			if (this.looselyEqual(payloadStr, payloadNotAvailable)) return false;
+		}
+
+		const normalized = String(payloadStr).replace(/"/g, '').trim().toLowerCase();
+		if (['online', '1', 'true', 'yes'].includes(normalized)) return true;
+		if (['offline', '0', 'false', 'no'].includes(normalized)) return false;
+
+		return Boolean(normalized);
+	}
+
+	sanitizePayloadForLog(payload)
+	{
+		if (payload === null || payload === undefined)
+		{
+			return payload;
+		}
+
+		const str = String(payload);
+		const limit = 500;
+		if (str.length <= limit)
+		{
+			return str;
+		}
+
+		return `${str.slice(0, limit)}...[truncated ${str.length - limit} chars]`;
 	}
 
 	// -------------------- Minimal template support --------------------
@@ -755,6 +839,64 @@ module.exports = class LinknLink extends SimpleClass
 	getDeviceList()
 	{
 		return this.devices;
+	}
+
+	getDetectedDeviceSummary(options = {})
+	{
+		const availableOnly = options.availableOnly !== false;
+		const devices = Array.from(this.devices.values())
+			.sort((a, b) => `${a.name || ''}${a.deviceId || ''}`.localeCompare(`${b.name || ''}${b.deviceId || ''}`));
+
+		const result = devices.map((device) =>
+		{
+			const componentDetails = Array.from(device.entities || [])
+				.map((entityKey) => this.entities.get(entityKey))
+				.filter(Boolean)
+				.filter((entity) =>
+				{
+					if (!availableOnly)
+					{
+						return true;
+					}
+
+					if (!entity.availabilityTopic)
+					{
+						return true;
+					}
+
+					return entity.isAvailable === true;
+				})
+				.map((entity) => ({
+					entityKey: entity.entityKey,
+					component: entity.component,
+					name: entity.name,
+					deviceClass: entity.deviceClass,
+					nodeId: entity.nodeId,
+					objectId: entity.objectId,
+					stateTopic: entity.stateTopic,
+					availabilityTopic: entity.availabilityTopic,
+					valueTemplate: entity.valueTemplate,
+					payloadOn: entity.payloadOn,
+					payloadOff: entity.payloadOff,
+					unit: entity.unit,
+					isAvailable: entity.isAvailable,
+					availabilityRaw: entity.availabilityRaw,
+					availabilityUpdatedAt: entity.availabilityUpdatedAt,
+					rawConfig: entity.rawConfig,
+				}))
+				.sort((a, b) => `${a.component || ''}:${a.name || ''}:${a.entityKey || ''}`.localeCompare(`${b.component || ''}:${b.name || ''}:${b.entityKey || ''}`));
+
+			return {
+				deviceId: device.deviceId,
+				name: device.name || null,
+				model: device.model || null,
+				manufacturer: device.manufacturer || null,
+				componentCount: componentDetails.length,
+				components: componentDetails,
+			};
+		});
+
+		return JSON.stringify(result, null, 2);
 	}
 
 	changeBroker(body)
