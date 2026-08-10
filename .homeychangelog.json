@@ -35,7 +35,7 @@
 	"1.0.9": {
 		"en": "Added support for eMotion M<ax 3 devices."
 	},
-	"1.1.0": {
+	"1.0.10": {
 		"en": "Enhance device log retrieval and availability handling; add UI option for filtering available components. Add / remove capabilities for eMotion devices based on their reported traits."
 	}
 }
