@@ -1,0 +1,23 @@
+{
+	"name": {
+		"en": "Switch"
+	},
+	"class": "socket",
+	"capabilities": [
+		"button.on",
+		"button.off"
+	],
+	"capabilitiesOptions": {
+		"button.on": {
+			"title": { "en": "Turn On" },
+			"maintenanceAction": false
+		},
+		"button.off": {
+			"title": { "en": "Turn Off" },
+			"maintenanceAction": false
+		}
+	},
+	"$extends": [
+		"localDriver"
+	]
+}

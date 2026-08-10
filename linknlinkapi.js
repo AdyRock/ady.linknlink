@@ -61,6 +61,9 @@ const desiredComponents = [
 	'ac_fan',
 	'ac_temp_up',
 	'ac_temp_down',
+	'switch  from eMotion Ultra',
+	'on',
+	'off',
 ];
 
 const DISCOVERY_PREFIX = 'homeassistant'; // default HA discovery prefix
@@ -492,38 +495,14 @@ module.exports = class LinknLink extends SimpleClass
 		const parsed = this.parseDiscoveryTopic(topic);
 		if (!parsed) return;
 
-		// Check if this config is of interest by looking to see if the name is in the desired array
-		if (!desiredComponents.includes(config.name))
-		{
-			this.app.updateLog(`Ignoring component ${config.name}`, 1);
-			this.app.updateLog(`Ignored discovery details: ${this.app.varToString({
-				topic,
-				component: parsed.component,
-				nodeId: parsed.nodeId,
-				objectId: parsed.objectId,
-				name: config.name,
-				uniqueId: config.unique_id,
-				device: {
-					name: config?.device?.name,
-					model: config?.device?.model,
-					manufacturer: config?.device?.manufacturer,
-					identifiers: config?.device?.identifiers,
-				},
-				stateTopic: config.state_topic,
-				availabilityTopic: config.availability_topic,
-				commandTopic: config.command_topic,
-				valueTemplate: config.value_template,
-				payloadOn: config.payload_on,
-				payloadOff: config.payload_off,
-			})}`, 1);
-			return;
-		}
-
 		const { component, nodeId, objectId } = parsed;
 
 		// Build a stable key for this entity
 		const uniqueId = config.unique_id || `${nodeId}/${objectId}`;
 		const entityKey = `${component}:${uniqueId}`;
+
+		// desiredComponents controls which entities get runtime state/availability subscriptions.
+		const isDesired = desiredComponents.includes(config.name);
 
 		// Group under a physical device if possible
 		const deviceId =
@@ -543,12 +522,11 @@ module.exports = class LinknLink extends SimpleClass
 					entities: new Set(),
 				});
 				this.app.updateLog(`Discovered device: ${JSON.stringify(this.devices.get(deviceId))}`, 1);
-				// In a Homey app, this is where you'd create/register the physical device.
 			}
 			this.devices.get(deviceId).entities.add(entityKey);
 		}
 
-		// Store entity config
+		// Always store for Detected log; isDesired marks whether runtime subscriptions are active.
 		this.entities.set(entityKey, {
 			entityKey,
 			configTopic: topic,
@@ -564,29 +542,34 @@ module.exports = class LinknLink extends SimpleClass
 			payloadOn: config.payload_on,
 			payloadOff: config.payload_off,
 			unit: config.unit_of_measurement,
+			isDesired,
 			isAvailable: null,
 			availabilityRaw: null,
 			availabilityUpdatedAt: null,
 			rawConfig: config,
 		});
 
-		// Subscribe to its topics
-		if (config.state_topic)
+		if (isDesired)
 		{
-			this.stateTopicToEntityKey.set(config.state_topic, entityKey);
-			this.MQTTclient.subscribe(config.state_topic);
-		}
+			// Only subscribe to runtime topics for known/supported entity names.
+			if (config.state_topic)
+			{
+				this.stateTopicToEntityKey.set(config.state_topic, entityKey);
+				this.MQTTclient.subscribe(config.state_topic);
+			}
 
-		if (config.availability_topic)
+			if (config.availability_topic)
+			{
+				this.availTopicToEntityKey.set(config.availability_topic, entityKey);
+				this.MQTTclient.subscribe(config.availability_topic);
+			}
+
+			this.app.updateLog(`Discovered entity: ${entityKey}, ${this.app.varToString(this.entities.get(entityKey))}`, 1);
+		}
+		else
 		{
-			this.availTopicToEntityKey.set(config.availability_topic, entityKey);
-			this.MQTTclient.subscribe(config.availability_topic);
+			this.app.updateLog(`Discovered unsupported entity (stored for Detected log only): ${entityKey} name="${config.name}"`, 1);
 		}
-
-		this.app.updateLog(`Discovered entity: ${entityKey}, ${this.app.varToString(this.entities.get(entityKey))}`, 1);
-
-		// In a Homey app, this is where you'd create/register a capability mapping
-		// e.g. binary_sensor motion -> alarm_motion, sensor temperature -> measure_temperature.
 	}
 
 	parseDiscoveryTopic(topic)
@@ -870,6 +853,7 @@ module.exports = class LinknLink extends SimpleClass
 					entityKey: entity.entityKey,
 					component: entity.component,
 					name: entity.name,
+					isDesired: entity.isDesired,
 					deviceClass: entity.deviceClass,
 					nodeId: entity.nodeId,
 					objectId: entity.objectId,

@@ -1224,6 +1224,55 @@
           "template": "add_devices"
         }
       ],
+      "icon": "/drivers/switch/assets/icon.svg",
+      "images": {
+        "large": "/drivers/switch/assets/images/large.jpg",
+        "small": "/drivers/switch/assets/images/small.jpg"
+      },
+      "name": {
+        "en": "Switch"
+      },
+      "class": "socket",
+      "capabilities": [
+        "button.on",
+        "button.off"
+      ],
+      "capabilitiesOptions": {
+        "button.on": {
+          "title": {
+            "en": "Turn On"
+          },
+          "maintenanceAction": false
+        },
+        "button.off": {
+          "title": {
+            "en": "Turn Off"
+          },
+          "maintenanceAction": false
+        }
+      },
+      "id": "switch"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
       "icon": "/drivers/tv/assets/icon.svg",
       "images": {
         "large": "/drivers/tv/assets/images/large.jpg",

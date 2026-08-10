@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const { syncCapabilitiesByEntityNameMap } = require('../capabilityVisibility');
 
 const CAPABILITY_TO_ENTITY = {
 	tv_power: 'power',
@@ -202,63 +203,6 @@ module.exports = class TVDevice extends Homey.Device
 
 	async processEntityAvailability(mqttMessage)
 	{
-		if (!mqttMessage || mqttMessage.deviceId !== this.getData().id)
-		{
-			return false;
-		}
-
-		for (const [capability, entityName] of Object.entries(CAPABILITY_TO_ENTITY))
-		{
-			if (entityName !== mqttMessage.name)
-			{
-				continue;
-			}
-
-			const nextVisible = this.getAvailabilityForEntityName(entityName);
-			if (nextVisible === null)
-			{
-				continue;
-			}
-
-			await this.syncCapabilityVisibility(capability, nextVisible);
-		}
-
-		return true;
-	}
-
-	getAvailabilityForEntityName(entityName)
-	{
-		const deviceId = this.getData().id;
-		const entities = Array.from(this.homey.app.linknLinkAPI.entities.values())
-			.filter((entity) => entity.deviceId === deviceId && entity.name === entityName);
-
-		const knownStates = entities
-			.map((entity) => entity.isAvailable)
-			.filter((state) => typeof state === 'boolean');
-
-		if (knownStates.length === 0)
-		{
-			return null;
-		}
-
-		return knownStates.some((state) => state === true);
-	}
-
-	async syncCapabilityVisibility(capability, shouldBeVisible)
-	{
-		const hasCapability = this.hasCapability(capability);
-
-		if (shouldBeVisible && !hasCapability)
-		{
-			await this.addCapability(capability);
-			this.homey.app.updateLog(`Added capability ${capability} on ${this.getName()} based on entity availability`, 1);
-			return;
-		}
-
-		if (!shouldBeVisible && hasCapability)
-		{
-			await this.removeCapability(capability);
-			this.homey.app.updateLog(`Removed capability ${capability} on ${this.getName()} based on entity availability`, 1);
-		}
+		return syncCapabilitiesByEntityNameMap(this, mqttMessage, CAPABILITY_TO_ENTITY);
 	}
 };

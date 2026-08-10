@@ -1,13 +1,22 @@
 'use strict';
 
 const Homey = require('homey');
+const { syncCapabilitiesByEntityNameMap } = require('../capabilityVisibility');
+
+const ENTITY_NAMES = {
+	allArea: ['all_area', 'Any Presence'],
+	zone1: ['area_1', 'Zone 1 Presence'],
+	zone2: ['area_2', 'Zone 2 Presence'],
+	zone3: ['area_3', 'Zone 3 Presence'],
+	zone4: ['area_4', 'Zone 4 Presence'],
+};
 
 const CAPABILITY_AVAILABILITY_MAP = {
-	alarm_presence: ['all_area'],
-	'alarm_presence.zone1': ['area_1'],
-	'alarm_presence.zone2': ['area_2'],
-	'alarm_presence.zone3': ['area_3'],
-	'alarm_presence.zone4': ['area_4'],
+	alarm_presence: ENTITY_NAMES.allArea,
+	'alarm_presence.zone1': ENTITY_NAMES.zone1,
+	'alarm_presence.zone2': ENTITY_NAMES.zone2,
+	'alarm_presence.zone3': ENTITY_NAMES.zone3,
+	'alarm_presence.zone4': ENTITY_NAMES.zone4,
 	measure_luminance: ['brightness'],
 	measure_signal_strength: ['wifi rssi'],
 };
@@ -78,13 +87,13 @@ module.exports = class eMotionProDevice extends Homey.Device
 		// Log the device status
 		this.homey.app.updateLog(`MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
 
-		if (mqttMessage.name === 'all_area')
+		if (ENTITY_NAMES.allArea.includes(mqttMessage.name))
 		{
 			this.setCapabilityValue('alarm_presence', value).catch(this.error);
 			return true;
 		}
 
-		if (mqttMessage.name === 'area_1')
+		if (ENTITY_NAMES.zone1.includes(mqttMessage.name))
 		{
 			if (this.getCapabilityValue('alarm_presence.zone1') !== value)
 			{
@@ -101,7 +110,7 @@ module.exports = class eMotionProDevice extends Homey.Device
 			return true;
 		}
 
-		if (mqttMessage.name === 'area_2')
+		if (ENTITY_NAMES.zone2.includes(mqttMessage.name))
 		{
 			if (this.getCapabilityValue('alarm_presence.zone2') !== value)
 			{
@@ -118,7 +127,7 @@ module.exports = class eMotionProDevice extends Homey.Device
 			return true;
 		}
 
-		if (mqttMessage.name === 'area_3')
+		if (ENTITY_NAMES.zone3.includes(mqttMessage.name))
 		{
 			if (this.getCapabilityValue('alarm_presence.zone3') !== value)
 			{
@@ -135,7 +144,7 @@ module.exports = class eMotionProDevice extends Homey.Device
 			return true;
 		}
 
-		if (mqttMessage.name === 'area_4')
+		if (ENTITY_NAMES.zone4.includes(mqttMessage.name))
 		{
 			if (this.getCapabilityValue('alarm_presence.zone4') !== value)
 			{
@@ -168,63 +177,6 @@ module.exports = class eMotionProDevice extends Homey.Device
 
 	async processEntityAvailability(mqttMessage)
 	{
-		if (!mqttMessage || mqttMessage.deviceId !== this.getData().id)
-		{
-			return false;
-		}
-
-		for (const [capability, entityNames] of Object.entries(CAPABILITY_AVAILABILITY_MAP))
-		{
-			if (!entityNames.includes(mqttMessage.name))
-			{
-				continue;
-			}
-
-			const nextVisible = this.getAggregatedAvailability(entityNames);
-			if (nextVisible === null)
-			{
-				continue;
-			}
-
-			await this.syncCapabilityVisibility(capability, nextVisible);
-		}
-
-		return true;
-	}
-
-	getAggregatedAvailability(entityNames)
-	{
-		const deviceId = this.getData().id;
-		const entities = Array.from(this.homey.app.linknLinkAPI.entities.values())
-			.filter((entity) => entity.deviceId === deviceId && entityNames.includes(entity.name));
-
-		const knownStates = entities
-			.map((entity) => entity.isAvailable)
-			.filter((state) => typeof state === 'boolean');
-
-		if (knownStates.length === 0)
-		{
-			return null;
-		}
-
-		return knownStates.some((state) => state === true);
-	}
-
-	async syncCapabilityVisibility(capability, shouldBeVisible)
-	{
-		const hasCapability = this.hasCapability(capability);
-
-		if (shouldBeVisible && !hasCapability)
-		{
-			await this.addCapability(capability);
-			this.homey.app.updateLog(`Added capability ${capability} on ${this.getName()} based on entity availability`, 1);
-			return;
-		}
-
-		if (!shouldBeVisible && hasCapability)
-		{
-			await this.removeCapability(capability);
-			this.homey.app.updateLog(`Removed capability ${capability} on ${this.getName()} based on entity availability`, 1);
-		}
+		return syncCapabilitiesByEntityNameMap(this, mqttMessage, CAPABILITY_AVAILABILITY_MAP);
 	}
 };

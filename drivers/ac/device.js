@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const { syncCapabilitiesByEntityMatcher } = require('../capabilityVisibility');
 
 const CAPABILITIES = [
 	'onoff',
@@ -316,66 +317,11 @@ module.exports = class ACRemoteDevice extends Homey.Device
 
 	async processEntityAvailability(mqttMessage)
 	{
-		if (!mqttMessage || mqttMessage.deviceId !== this.getData().id)
-		{
-			return false;
-		}
-
-		const isClimateEntity = mqttMessage.component === 'climate' || CLIMATE_ENTITY_NAMES.includes(mqttMessage.name);
-		if (!isClimateEntity)
-		{
-			return false;
-		}
-
-		const nextVisible = this.getClimateAvailability();
-		if (nextVisible === null)
-		{
-			return false;
-		}
-
-		for (const capability of CAPABILITIES)
-		{
-			await this.syncCapabilityVisibility(capability, nextVisible);
-		}
-
-		return true;
-	}
-
-	getClimateAvailability()
-	{
-		const deviceId = this.getData().id;
-		const entities = Array.from(this.homey.app.linknLinkAPI.entities.values())
-			.filter((entity) =>
-				entity.deviceId === deviceId
-				&& (entity.component === 'climate' || CLIMATE_ENTITY_NAMES.includes(entity.name)));
-
-		const knownStates = entities
-			.map((entity) => entity.isAvailable)
-			.filter((state) => typeof state === 'boolean');
-
-		if (knownStates.length === 0)
-		{
-			return null;
-		}
-
-		return knownStates.some((state) => state === true);
-	}
-
-	async syncCapabilityVisibility(capability, shouldBeVisible)
-	{
-		const hasCapability = this.hasCapability(capability);
-
-		if (shouldBeVisible && !hasCapability)
-		{
-			await this.addCapability(capability);
-			this.homey.app.updateLog(`Added capability ${capability} on ${this.getName()} based on entity availability`, 1);
-			return;
-		}
-
-		if (!shouldBeVisible && hasCapability)
-		{
-			await this.removeCapability(capability);
-			this.homey.app.updateLog(`Removed capability ${capability} on ${this.getName()} based on entity availability`, 1);
-		}
+		return syncCapabilitiesByEntityMatcher(
+			this,
+			mqttMessage,
+			CAPABILITIES,
+			(entity) => entity.component === 'climate' || CLIMATE_ENTITY_NAMES.includes(entity.name),
+		);
 	}
 };
