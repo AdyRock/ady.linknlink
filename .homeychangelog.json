@@ -40,5 +40,8 @@
 	},
 	"1.0.11": {
 		"en": "Added Remote Switch support."
+	},
+	"1.0.12": {
+		"en": "Update support for eMotion Max."
 	}
 }

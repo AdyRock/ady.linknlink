@@ -3,16 +3,26 @@
 const Homey = require('homey');
 const { syncCapabilitiesByEntityNameMap } = require('../capabilityVisibility');
 
+// eMotion Max publishes the same functions with different entity names
+const ENTITY_NAME_ALIASES = {
+	zone_all_area: 'Any Presence',
+	zone_1: 'Zone 1 Presence',
+	zone_2: 'Zone 2 Presence',
+	zone_3: 'Zone 3 Presence',
+	zone_4: 'Zone 4 Presence',
+	'Persons in Detection Range': 'All Target Counts',
+};
+
 const CAPABILITY_AVAILABILITY_MAP = {
-	alarm_presence: ['Any Presence'],
-	measure_people_count: ['All Target Counts', 'Persons in Fenced Zones'],
-	'alarm_presence.zone1': ['Zone 1 Presence'],
+	alarm_presence: ['Any Presence', 'zone_all_area'],
+	measure_people_count: ['All Target Counts', 'Persons in Fenced Zones', 'Persons in Detection Range'],
+	'alarm_presence.zone1': ['Zone 1 Presence', 'zone_1'],
 	'measure_people_count.zone1': ['Zone 1 Target Counts'],
-	'alarm_presence.zone2': ['Zone 2 Presence'],
+	'alarm_presence.zone2': ['Zone 2 Presence', 'zone_2'],
 	'measure_people_count.zone2': ['Zone 2 Target Counts'],
-	'alarm_presence.zone3': ['Zone 3 Presence'],
+	'alarm_presence.zone3': ['Zone 3 Presence', 'zone_3'],
 	'measure_people_count.zone3': ['Zone 3 Target Counts'],
-	'alarm_presence.zone4': ['Zone 4 Presence'],
+	'alarm_presence.zone4': ['Zone 4 Presence', 'zone_4'],
 	'measure_people_count.zone4': ['Zone 4 Target Counts'],
 	measure_temperature: ['temperature'],
 	measure_humidity: ['humidity'],
@@ -85,6 +95,12 @@ module.exports = class eMotionUltraDevice extends Homey.Device
 
 		// Log the device status
 		this.homey.app.updateLog(`MQTT message received for ${this.getName()}: ${mqttMessage.name} => ${value}`);
+
+		const aliasName = ENTITY_NAME_ALIASES[mqttMessage.name];
+		if (aliasName)
+		{
+			return this.processMQTTMessage({ ...mqttMessage, name: aliasName }, value);
+		}
 
 		if (mqttMessage.name === 'Any Presence')
 		{
