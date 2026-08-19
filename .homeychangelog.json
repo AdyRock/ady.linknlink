@@ -43,5 +43,8 @@
 	},
 	"1.0.12": {
 		"en": "Update support for eMotion Max."
+	},
+	"1.0.13": {
+		"en": "Added support for eMotion Air with a choice of MQTT or Zigbee drivers (MQTT requires an eMotion Ultra to bridge)."
 	}
 }

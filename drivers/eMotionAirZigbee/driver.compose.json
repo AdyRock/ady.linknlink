@@ -16,6 +16,40 @@
 		"measure_luminance",
 		"measure_battery"
 	],
+	"settings": [
+		{
+			"id": "temperature_min_change",
+			"type": "number",
+			"label": {
+				"en": "Temperature minimum change before reporting"
+			},
+			"hint": {
+				"en": "The minimum temperature change required before the sensor sends a new report. WARNING: Low values can drain the battery faster."
+			},
+			"value": 1,
+			"min": 0.1,
+			"step": 0.1,
+			"units": {
+				"en": "°C"
+			}
+		},
+		{
+			"id": "humidity_min_change",
+			"type": "number",
+			"label": {
+				"en": "Humidity minimum change before reporting"
+			},
+			"hint": {
+				"en": "The minimum relative humidity change required before the sensor sends a new report. WARNING: Low values can drain the battery faster."
+			},
+			"value": 1,
+			"min": 0.1,
+			"step": 0.1,
+			"units": {
+				"en": "%"
+			}
+		}
+	],
 	"energy": {
 		"batteries": [
 			"AAA",

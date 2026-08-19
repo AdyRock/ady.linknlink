@@ -5,6 +5,11 @@ const { CLUSTER } = require('zigbee-clusters');
 const AirOnOffBoundCluster = require('./AirOnOffBoundCluster');
 const AirLevelControlBoundCluster = require('./AirLevelControlBoundCluster');
 
+const REPORTING_SETTING_KEYS = [
+	'temperature_min_change',
+	'humidity_min_change',
+];
+
 function parseOccupancy(value)
 {
 	if (value && typeof value.getBit === 'function')
@@ -83,7 +88,42 @@ module.exports = class eMotionAirZigbeeDevice extends ZigBeeDevice
 		this.log('eMotion Air Zigbee device initialized');
 	}
 
-	configureSensorReporting()
+	async onSettings({ newSettings, changedKeys })
+	{
+		if (!changedKeys.some((key) => REPORTING_SETTING_KEYS.includes(key)))
+		{
+			return;
+		}
+
+		for (const key of changedKeys.filter((changedKey) => REPORTING_SETTING_KEYS.includes(changedKey)))
+		{
+			if (!Number.isFinite(newSettings[key]) || newSettings[key] < 0.1)
+			{
+				throw new Error('Minimum change before reporting must be at least 0.1');
+			}
+		}
+
+		this.sensorReportingConfigured = false;
+		this.configureSensorReporting(newSettings);
+	}
+
+	getAttributeReportingConfig(settings = this.getSettings())
+	{
+		return ATTRIBUTE_REPORTING_CONFIG.map((config) =>
+		{
+			if (config.cluster === CLUSTER.TEMPERATURE_MEASUREMENT)
+			{
+				return { ...config, minChange: Math.round((settings.temperature_min_change ?? 1) * 100) };
+			}
+			if (config.cluster === CLUSTER.RELATIVE_HUMIDITY_MEASUREMENT)
+			{
+				return { ...config, minChange: Math.round((settings.humidity_min_change ?? 1) * 100) };
+			}
+			return config;
+		});
+	}
+
+	configureSensorReporting(settings)
 	{
 		if (this.sensorReportingConfigured || this.sensorReportingConfigurationPending)
 		{
@@ -91,12 +131,13 @@ module.exports = class eMotionAirZigbeeDevice extends ZigBeeDevice
 		}
 
 		this.sensorReportingConfigurationPending = true;
-		const configure = () => this.configureAttributeReporting(ATTRIBUTE_REPORTING_CONFIG);
+		const configure = () => this.configureAttributeReporting(this.getAttributeReportingConfig(settings));
 		configure()
 			.then(() =>
 			{
 				this.sensorReportingConfigured = true;
 				this.sensorReportingConfigurationPending = false;
+				this.sensorReportingRetryScheduled = false;
 				this.log('eMotion Air Zigbee sensor reporting configured');
 				this.refreshPresence('reporting configuration');
 			})
@@ -111,10 +152,15 @@ module.exports = class eMotionAirZigbeeDevice extends ZigBeeDevice
 						.then(() =>
 						{
 							this.sensorReportingConfigured = true;
+							this.sensorReportingRetryScheduled = false;
 							this.log('eMotion Air Zigbee sensor reporting configured after device wake');
 							this.refreshPresence('reporting retry');
 						})
-						.catch((retryErr) => this.error('Unable to configure eMotion Air Zigbee sensor reporting after device wake', retryErr));
+						.catch((retryErr) =>
+						{
+							this.sensorReportingRetryScheduled = false;
+							this.error('Unable to configure eMotion Air Zigbee sensor reporting after device wake', retryErr);
+						});
 				}
 			});
 	}
