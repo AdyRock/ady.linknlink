@@ -6,7 +6,7 @@
 		{
 			"name": "device",
 			"type": "device",
-			"filter": "driver_id=eMotionAir"
+			"filter": "driver_id=eMotionAir|eMotionAirZigbee"
 		}
 	]
 }

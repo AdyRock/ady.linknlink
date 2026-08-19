@@ -8,9 +8,11 @@
 		"lint:all": "eslint ."
 	},
 	"dependencies": {
-		"node-fetch": "^2.7.0",
+		"homey-zigbeedriver": "^2.2.17",
 		"lodash": "^4.17.21",
-		"websocket-stream": "^5.5.2"
+		"node-fetch": "^2.7.0",
+		"websocket-stream": "^5.5.2",
+		"zigbee-clusters": "^3.6.1"
 	},
 	"devDependencies": {
 		"@types/homey": "npm:homey-apps-sdk-v3-types@^0.2.2",
