@@ -1,0 +1,24 @@
+{
+	"name": {
+		"en": "eMotion Air"
+	},
+	"class": "sensor",
+	"capabilities": [
+		"alarm_presence",
+		"measure_temperature",
+		"measure_humidity",
+		"measure_luminance",
+		"measure_battery",
+		"measure_signal_strength"
+	],
+	"energy": {
+		"batteries": [
+			"AAA",
+			"AAA",
+			"AAA"
+		]
+	},
+	"$extends": [
+		"localDriver"
+	]
+}

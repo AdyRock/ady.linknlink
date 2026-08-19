@@ -295,6 +295,71 @@
       },
       {
         "title": {
+          "en": "The eMotion Air button was double pressed"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionAir"
+          }
+        ],
+        "id": "emotion_air_button_double_press"
+      },
+      {
+        "title": {
+          "en": "The eMotion Air button was long pressed"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionAir"
+          }
+        ],
+        "id": "emotion_air_button_long_press"
+      },
+      {
+        "title": {
+          "en": "The eMotion Air button was pressed"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionAir"
+          }
+        ],
+        "id": "emotion_air_button_press"
+      },
+      {
+        "title": {
+          "en": "The eMotion Air button was released"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionAir"
+          }
+        ],
+        "id": "emotion_air_button_release"
+      },
+      {
+        "title": {
+          "en": "The eMotion Air button was triple pressed"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=eMotionAir"
+          }
+        ],
+        "id": "emotion_air_button_triple_press"
+      },
+      {
+        "title": {
           "en": "the number of people changed",
           "nl": "het aantal personen is gewijzigd",
           "de": "die Anzahl der Personen hat sich geändert",
@@ -752,6 +817,52 @@
         "measure_signal_strength"
       ],
       "id": "eMotion"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "pair": [
+        {
+          "id": "list_my_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "icon": "/drivers/eMotionAir/assets/icon.svg",
+      "images": {
+        "large": "/drivers/eMotionAir/assets/images/large.jpg",
+        "small": "/drivers/eMotionAir/assets/images/small.jpg"
+      },
+      "name": {
+        "en": "eMotion Air"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_presence",
+        "measure_temperature",
+        "measure_humidity",
+        "measure_luminance",
+        "measure_battery",
+        "measure_signal_strength"
+      ],
+      "energy": {
+        "batteries": [
+          "AAA",
+          "AAA",
+          "AAA"
+        ]
+      },
+      "id": "eMotionAir"
     },
     {
       "platforms": [

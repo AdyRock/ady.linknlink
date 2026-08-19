@@ -35,6 +35,13 @@ module.exports = class LinknLink extends Homey.App
 		this.measure_people_count_zone2_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone2_changed');
 		this.measure_people_count_zone3_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone3_changed');
 		this.measure_people_count_zone4_changed = this.homey.flow.getDeviceTriggerCard('measure_people_count_zone4_changed');
+		this.eMotionAirButtonTriggers = new Map([
+			['Press', this.homey.flow.getDeviceTriggerCard('emotion_air_button_press')],
+			['Double Press', this.homey.flow.getDeviceTriggerCard('emotion_air_button_double_press')],
+			['Triple Press', this.homey.flow.getDeviceTriggerCard('emotion_air_button_triple_press')],
+			['Long Press', this.homey.flow.getDeviceTriggerCard('emotion_air_button_long_press')],
+			['Release', this.homey.flow.getDeviceTriggerCard('emotion_air_button_release')],
+		]);
 
 		const tvActionMap = {
 			tv_power_press: 'tv_power',
@@ -167,6 +174,19 @@ module.exports = class LinknLink extends Homey.App
 	trigger_measure_people_count_zone4_changed(device)
 	{
 		this.measure_people_count_zone4_changed.trigger(device);
+	}
+
+	triggerEMotionAirButtonEvent(device, eventType)
+	{
+		const trigger = this.eMotionAirButtonTriggers.get(eventType);
+		if (!trigger)
+		{
+			this.updateLog(`Unknown eMotion Air button event: ${eventType}`, 0);
+			return false;
+		}
+
+		trigger.trigger(device);
+		return true;
 	}
 
 	registerDevice(did, driverId)

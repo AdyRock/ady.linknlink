@@ -21,6 +21,11 @@ const mqtt = require('./mqtt');
 const desiredComponents = [
 	'temperature',
 	'humidity',
+	'motion',
+	'illuminance',
+	'battery',
+	'rssi',
+	'button',
 	'brightness',
 	'Any Presence',
 	'Zone 1 Presence',
@@ -137,7 +142,7 @@ module.exports = class LinknLink extends SimpleClass
 		// key: device identifier string e.g. "did_e04b..."
 		this.devices = new Map();
 
-		// topics -> entityKey
+		// topics -> entityKeys
 		this.stateTopicToEntityKey = new Map();
 		this.availTopicToEntityKey = new Map();
 		this.pendingMessages = new Map();
@@ -370,18 +375,24 @@ module.exports = class LinknLink extends SimpleClass
 				}
 
 				// State updates
-				const entKeyFromState = this.stateTopicToEntityKey.get(topic);
-				if (entKeyFromState)
+				const entKeysFromState = this.stateTopicToEntityKey.get(topic);
+				if (entKeysFromState)
 				{
-					this.handleEntityState(entKeyFromState, payloadStr);
+					for (const entityKey of entKeysFromState)
+					{
+						this.handleEntityState(entityKey, payloadStr);
+					}
 					return;
 				}
 
 				// Availability updates
-				const entKeyFromAvail = this.availTopicToEntityKey.get(topic);
-				if (entKeyFromAvail)
+				const entKeysFromAvail = this.availTopicToEntityKey.get(topic);
+				if (entKeysFromAvail)
 				{
-					this.handleEntityAvailability(entKeyFromAvail, payloadStr);
+					for (const entityKey of entKeysFromAvail)
+					{
+						this.handleEntityAvailability(entityKey, payloadStr);
+					}
 				}
 			});
 
@@ -534,6 +545,13 @@ module.exports = class LinknLink extends SimpleClass
 		}
 
 		// Always store for Detected log; isDesired marks whether runtime subscriptions are active.
+		const stateTopics = config.state_topic ? [config.state_topic] : [];
+		const eMotionAirRootTopic = `home/${deviceId}`;
+		if (config?.device?.model === 'eMotion Air' && config.state_topic === `${eMotionAirRootTopic}/state`)
+		{
+			stateTopics.push(eMotionAirRootTopic);
+		}
+
 		this.entities.set(entityKey, {
 			entityKey,
 			configTopic: topic,
@@ -544,6 +562,7 @@ module.exports = class LinknLink extends SimpleClass
 			name: config.name,
 			deviceClass: config.device_class,
 			stateTopic: config.state_topic,
+			stateTopics,
 			availabilityTopic: config.availability_topic,
 			valueTemplate: config.value_template,
 			payloadOn: config.payload_on,
@@ -559,15 +578,15 @@ module.exports = class LinknLink extends SimpleClass
 		if (isDesired)
 		{
 			// Only subscribe to runtime topics for known/supported entity names.
-			if (config.state_topic)
+			for (const stateTopic of stateTopics)
 			{
-				this.stateTopicToEntityKey.set(config.state_topic, entityKey);
-				this.MQTTclient.subscribe(config.state_topic);
+				this.addEntityTopic(this.stateTopicToEntityKey, stateTopic, entityKey);
+				this.MQTTclient.subscribe(stateTopic);
 			}
 
 			if (config.availability_topic)
 			{
-				this.availTopicToEntityKey.set(config.availability_topic, entityKey);
+				this.addEntityTopic(this.availTopicToEntityKey, config.availability_topic, entityKey);
 				this.MQTTclient.subscribe(config.availability_topic);
 			}
 
@@ -589,6 +608,27 @@ module.exports = class LinknLink extends SimpleClass
 		return { component, nodeId, objectId };
 	}
 
+	addEntityTopic(topicMap, topic, entityKey)
+	{
+		if (!topicMap.has(topic))
+		{
+			topicMap.set(topic, new Set());
+		}
+		topicMap.get(topic).add(entityKey);
+	}
+
+	removeEntityTopic(topicMap, topic, entityKey)
+	{
+		const entityKeys = topicMap.get(topic);
+		if (!entityKeys) return;
+
+		entityKeys.delete(entityKey);
+		if (entityKeys.size === 0)
+		{
+			topicMap.delete(topic);
+		}
+	}
+
 	removeEntityByConfigTopic(configTopic)
 	{
 		// Entity removed by HA; delete if we find it
@@ -597,8 +637,11 @@ module.exports = class LinknLink extends SimpleClass
 			if (ent.configTopic === configTopic)
 			{
 				this.entities.delete(key);
-				if (ent.stateTopic) this.stateTopicToEntityKey.delete(ent.stateTopic);
-				if (ent.availabilityTopic) this.availTopicToEntityKey.delete(ent.availabilityTopic);
+				for (const stateTopic of ent.stateTopics || [ent.stateTopic].filter(Boolean))
+				{
+					this.removeEntityTopic(this.stateTopicToEntityKey, stateTopic, key);
+				}
+				if (ent.availabilityTopic) this.removeEntityTopic(this.availTopicToEntityKey, ent.availabilityTopic, key);
 				this.app.updateLog(`Entity removed: ${key}`);
 				break;
 			}
@@ -820,6 +863,17 @@ module.exports = class LinknLink extends SimpleClass
 			const scaled = raw * factor;
 			const p = 10 ** decimals;
 			return Math.round(scaled * p) / p;
+		}
+
+		// 3) value_json.<key>/<divisor>
+		// e.g. "{{value_json.temp|float/10.0}}"
+		const m3 = t.match(/^\{\{value_json\.([a-zA-Z0-9_]+)(?:\|float)?\/([0-9.]+)\}\}$/);
+		if (m3 && json && typeof json === 'object')
+		{
+			const raw = Number(json[m3[1]]);
+			const divisor = Number(m3[2]);
+			if (!Number.isFinite(raw) || !Number.isFinite(divisor) || divisor === 0) return undefined;
+			return raw / divisor;
 		}
 
 		// If we can’t interpret the template, fall back safely.

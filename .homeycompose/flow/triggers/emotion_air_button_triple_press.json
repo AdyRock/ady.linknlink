@@ -1,0 +1,12 @@
+{
+	"title": {
+		"en": "The eMotion Air button was triple pressed"
+	},
+	"args": [
+		{
+			"name": "device",
+			"type": "device",
+			"filter": "driver_id=eMotionAir"
+		}
+	]
+}
