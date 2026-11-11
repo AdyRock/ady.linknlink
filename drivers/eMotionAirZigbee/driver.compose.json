@@ -48,6 +48,178 @@
 			"units": {
 				"en": "%"
 			}
+		},
+		{
+			"type": "group",
+			"label": {
+				"en": "Device configuration (requires firmware 1.2.8 or later)"
+			},
+			"children": [
+				{
+					"id": "firmware_version",
+					"type": "label",
+					"label": {
+						"en": "Device firmware version"
+					},
+					"hint": {
+						"en": "The firmware version reported by the device. It is read while the device is awake, so it may stay empty until the device next wakes (short-press its button once). The settings below require firmware 1.2.8 or later."
+					},
+					"value": ""
+				},
+				{
+					"id": "radar_enable",
+					"type": "checkbox",
+					"label": {
+						"en": "Radar detection enabled"
+					},
+					"hint": {
+						"en": "Enable or disable mmWave radar presence sensing. The device is battery powered, so short-press its button once after saving to apply the new configuration."
+					},
+					"value": true
+				},
+				{
+					"id": "freq",
+					"type": "dropdown",
+					"label": {
+						"en": "Radar detection frequency"
+					},
+					"hint": {
+						"en": "How often the radar samples for presence. Higher frequencies respond faster but use more battery."
+					},
+					"value": "0",
+					"values": [
+						{
+							"id": "0",
+							"label": {
+								"en": "0.5 Hz (default)"
+							}
+						},
+						{
+							"id": "1",
+							"label": {
+								"en": "1 Hz"
+							}
+						},
+						{
+							"id": "2",
+							"label": {
+								"en": "2 Hz"
+							}
+						},
+						{
+							"id": "3",
+							"label": {
+								"en": "4 Hz"
+							}
+						},
+						{
+							"id": "4",
+							"label": {
+								"en": "8 Hz"
+							}
+						}
+					]
+				},
+				{
+					"id": "trith",
+					"type": "number",
+					"label": {
+						"en": "Radar trigger sensitivity"
+					},
+					"hint": {
+						"en": "Higher values trigger presence more easily. Lower values resist interference better but may miss subtle movement."
+					},
+					"value": 3,
+					"min": 1,
+					"max": 10,
+					"step": 1
+				},
+				{
+					"id": "absence_timeout",
+					"type": "number",
+					"label": {
+						"en": "Presence clear delay"
+					},
+					"hint": {
+						"en": "The time without detection before presence is cleared, in steps of 2 seconds."
+					},
+					"value": 180,
+					"min": 0,
+					"max": 510,
+					"step": 2,
+					"units": {
+						"en": "s"
+					}
+				},
+				{
+					"id": "lx_interval",
+					"type": "number",
+					"label": {
+						"en": "Illuminance sampling interval"
+					},
+					"hint": {
+						"en": "How often the illuminance is sampled. WARNING: Low values can drain the battery faster."
+					},
+					"value": 30,
+					"min": 2,
+					"max": 60000,
+					"step": 1,
+					"units": {
+						"en": "s"
+					}
+				},
+				{
+					"id": "sht_interval",
+					"type": "number",
+					"label": {
+						"en": "Temperature & humidity sampling interval"
+					},
+					"hint": {
+						"en": "How often the temperature and humidity are sampled. WARNING: Low values can drain the battery faster."
+					},
+					"value": 60,
+					"min": 10,
+					"max": 60000,
+					"step": 1,
+					"units": {
+						"en": "s"
+					}
+				},
+				{
+					"id": "lx_thread1",
+					"type": "number",
+					"label": {
+						"en": "Illuminance threshold: dark / normal"
+					},
+					"hint": {
+						"en": "Below this level the illuminance is classified as dark. Must be lower than the normal / bright threshold. Only affects the dark/normal/bright classification, not the reported lux value."
+					},
+					"value": 0,
+					"min": 0,
+					"max": 65535,
+					"step": 1,
+					"units": {
+						"en": "lx"
+					}
+				},
+				{
+					"id": "lx_thread2",
+					"type": "number",
+					"label": {
+						"en": "Illuminance threshold: normal / bright"
+					},
+					"hint": {
+						"en": "Above this level the illuminance is classified as bright. Must be higher than the dark / normal threshold. Only affects the dark/normal/bright classification, not the reported lux value."
+					},
+					"value": 1,
+					"min": 0,
+					"max": 65535,
+					"step": 1,
+					"units": {
+						"en": "lx"
+					}
+				}
+			]
 		}
 	],
 	"energy": {
